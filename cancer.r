@@ -2,62 +2,65 @@ packages <- c(
   "ggplot2", "gclus", "corrplot", "pscl", "broom",
   "reshape2", "dplyr", "tidyr", "GGally"
 )
-#install.packages("stringi", type = "source")
+
 install.packages(setdiff(packages, rownames(installed.packages())))
 lapply(packages, library, character.only = TRUE)
 
+# =====================================================================
+# 1. CARGA DE DATOS Y FILTRO DE VARIABLES
+# =====================================================================
+
 df <- read.csv("breast_cancer_wisconsin_diagnostic.csv")
 
-# Eliminar columnas inútiles
 df <- df[, colSums(is.na(df)) < nrow(df)]
 df <- df[, sapply(df, function(x) length(unique(x)) > 1)]
 
-# Variable objetivo como factor
 df$diagnosis <- factor(df$diagnosis,
                        levels = c("B","M"),
                        labels = c("Benigno","Maligno"))
 
-# Modelo completo
+df <- df %>% select(diagnosis, ends_with("_mean"))
+
+vars <- df[, setdiff(names(df), "diagnosis")]
+
+# =====================================================================
+# 2. MODELOS LOGÍSTICOS
+# =====================================================================
+
 modelo <- glm(diagnosis ~ ., data=df, family=binomial)
 
-# Modelo clínico
 modelo_clinico <- glm(
   diagnosis ~ radius_mean + perimeter_mean + area_mean +
                concavity_mean + concave.points_mean,
   data=df, family=binomial
 )
 
-# Variables suaves / textura / forma
 modelo_estilo <- glm(
   diagnosis ~ texture_mean + smoothness_mean +
                compactness_mean + symmetry_mean,
   data=df, family=binomial
 )
 
-# Morfológicas avanzadas
 modelo_morfologico <- glm(
-  diagnosis ~ radius_mean + radius_worst +
-               concave.points_mean + concave.points_worst,
-  data=df, family=binomial
+  diagnosis ~ radius_mean +
+    concavity_mean +
+    concave.points_mean +
+    symmetry_mean,
+  data=df,
+  family=binomial
 )
 
-# Modelo compacto
 modelo_compacto <- glm(
   diagnosis ~ radius_mean + concavity_mean,
   data=df, family=binomial
 )
 
-# Comparación por AIC
-AIC(modelo, modelo_clinico, modelo_estilo,
-    modelo_morfologico, modelo_compacto)
-
-pR2(modelo)
-pR2(modelo_clinico)
-pR2(modelo_estilo)
-pR2(modelo_morfologico)
-pR2(modelo_compacto)
+# =====================================================================
+# 4. DIAGNÓSTICOS DE LOS MODELOS
+# =====================================================================
 
 pdf("diagnosticos_modelos.pdf", width = 10, height = 10)
+
 modelos <- list(
   "Modelo completo"      = modelo,
   "Modelo clínico"       = modelo_clinico,
@@ -67,26 +70,20 @@ modelos <- list(
 )
 
 for (nombre in names(modelos)) {
-
-  # página separadora
   plot.new()
   text(0.5, 0.5, nombre, cex = 2, font = 2)
-
-  # gráficos de diagnóstico
   plot(modelos[[nombre]])
 }
 
 dev.off()
 
-vars <- df[, setdiff(names(df), "diagnosis")]
-
-corr_mat <- abs(cor(vars))
-corr_colors <- dmat.color(corr_mat)
-order_vars <- order.single(corr_mat)
+# =====================================================================
+# 5. PAIRS PLOT (GGPAIRS)
+# =====================================================================
 
 pdf("pairs_wdbc.pdf", width = 20, height = 20)
 
-g <- ggpairs(
+# g <- ggpairs(
   vars,
   title = "Interacción entre variables predictoras — WDBC",
   upper = list(continuous = wrap("cor", size = 3)),
@@ -101,16 +98,22 @@ g <- ggpairs(
     strip.text = element_text(size = 7)
   )
 
-print(g) 
-
+print(g)
 dev.off()
 
+# =====================================================================
+# 6. CPAIRS (gclus)
+# =====================================================================
+
+corr_mat <- abs(cor(vars))
+corr_colors <- dmat.color(corr_mat)
+order_vars <- order.single(corr_mat)
 
 pdf("cpairs_wdbc.pdf", width = 20, height = 20)
 
-par(cex = 0.6)        # escala general
-par(cex.axis = 0.5)   # tamaño de las etiquetas de ejes
-par(mar = c(5,5,3,1)) # márgenes más grandes
+par(cex = 0.6)
+par(cex.axis = 0.5)
+par(mar = c(5,5,3,1))
 
 cpairs(
   vars,
@@ -122,13 +125,17 @@ cpairs(
 
 dev.off()
 
-vars <- df[, setdiff(names(df), "diagnosis")]
+# =====================================================================
+# 7. PCA (scores)
+# =====================================================================
+
 pca <- prcomp(vars, scale.=TRUE)
 
 scores <- as.data.frame(pca$x[, 1:2])
 scores$diagnosis <- df$diagnosis
 
 pdf("pca_scores.pdf", width=8, height=6)
+
 ggplot(scores, aes(PC1, PC2, color=diagnosis)) +
   geom_point(alpha=0.6, size=2) +
   stat_ellipse(level=0.95, linetype="solid") +
@@ -137,22 +144,16 @@ ggplot(scores, aes(PC1, PC2, color=diagnosis)) +
 
 dev.off()
 
-# Extraer rotación para variables
-rot <- as.data.frame(pca$rotation[, 1:2])
-rot$varname <- rownames(rot)
+# =====================================================================
+# 8. HEATMAP
+# =====================================================================
 
-# 1. Matriz de correlación
 M <- cor(vars)
-
-# 2. Ordenamiento jerárquico para mejor agrupación visual
 hc <- hclust(dist(M))
 M_ord <- M[hc$order, hc$order]
-
-# 3. Convertir a formato largo para ggplot
 M_melt <- melt(M_ord)
 colnames(M_melt) <- c("Var1", "Var2", "Cor")
 
-# 4. Exportar como PDF vectorial (zoom infinito)
 pdf("heatmap_wdbc.pdf", width=14, height=12)
 
 ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
@@ -179,4 +180,71 @@ ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
   )
 
 dev.off()
+
+# =====================================================================
+# 9. GENERAR LOG DE RESULTADOS (summary, AIC, pseudo-R2)
+# =====================================================================
+
+sink("resultados_modelos.log")
+
+cat("==========================================================\n")
+cat(" ANÁLISIS DE REGRESIÓN LOGÍSTICA — WDBC (solo variables _mean)\n")
+cat(" Fecha de ejecución: ", as.character(Sys.time()), "\n")
+cat("==========================================================\n\n\n")
+
+# --- AIC ---
+cat("==========================================================\n")
+cat(" COMPARACIÓN DE MODELOS POR AIC\n")
+cat("==========================================================\n")
+print(AIC(modelo, modelo_clinico, modelo_estilo,
+          modelo_morfologico, modelo_compacto))
+cat("\n\n")
+
+# --- Pseudo-R2 ---
+cat("==========================================================\n")
+cat(" PSEUDO-R² (McFadden, Cox–Snell, Nagelkerke)\n")
+cat("==========================================================\n\n")
+
+cat("Modelo completo:\n")
+print(pR2(modelo))
+cat("\n\n")
+
+cat("Modelo clínico:\n")
+print(pR2(modelo_clinico))
+cat("\n\n")
+
+cat("Modelo estilo:\n")
+print(pR2(modelo_estilo))
+cat("\n\n")
+
+cat("Modelo morfológico:\n")
+print(pR2(modelo_morfologico))
+cat("\n\n")
+
+cat("Modelo compacto:\n")
+print(pR2(modelo_compacto))
+cat("\n\n")
+
+# --- Summary detallado de cada modelo ---
+cat("==========================================================\n")
+cat(" SUMMARY COMPLETOS DE LOS MODELOS\n")
+cat("==========================================================\n\n")
+
+modelos <- list(
+  "Modelo completo"      = modelo,
+  "Modelo clínico"       = modelo_clinico,
+  "Modelo estilo"        = modelo_estilo,
+  "Modelo morfológico"   = modelo_morfologico,
+  "Modelo compacto"      = modelo_compacto
+)
+
+for (nombre in names(modelos)) {
+  cat("----------------------------------------------------------\n")
+  cat(" ", nombre, "\n")
+  cat("----------------------------------------------------------\n")
+  print(summary(modelos[[nombre]]))
+  cat("\n\n")
+}
+
+sink()
 
