@@ -1,146 +1,74 @@
-# 🩺 Diabetes Risk Prediction — BRFSS 2015
+# 🩺 Predicción de Cáncer de Mama — WDBC
 
-La diabetes es una de las enfermedades crónicas más prevalentes en Estados Unidos, afectando a más de 34 millones de personas y representando costos superiores a los $300 mil millones de dólares al año. La detección temprana es esencial para prevenir complicaciones graves como enfermedades cardíacas, insuficiencia renal, ceguera o amputaciones.
+El cáncer de mama representa uno de los principales desafíos de salud a nivel mundial, con más de 2 millones de diagnósticos nuevos al año. La detección temprana mejora drásticamente la supervivencia, y los modelos estadísticos pueden apoyar la clasificación temprana de tumores entre **benignos** y **malignos** usando mediciones tomadas de imágenes de biopsias.
 
-El **Behavioral Risk Factor Surveillance System (BRFSS)** es la encuesta telefónica anual más grande del mundo sobre factores de riesgo en salud, realizada por el **CDC (Centers for Disease Control and Prevention)** desde 1984. Este proyecto utiliza una versión limpia del BRFSS 2015 para evaluar factores asociados a la diabetes y explorar modelos predictivos de riesgo.
+El **Wisconsin Diagnostic Breast Cancer (WDBC)** es un dataset ampliamente utilizado en la literatura para desarrollar modelos de clasificación binaria basados en características geométrico-morfológicas del tumor.
+
+Este estudio usa una versión depurada del dataset para comparar modelos logísticos construidos a partir de distintos **subconjuntos de variables**, con el objetivo de evaluar qué tan bien se puede clasificar el diagnóstico con menos información.
+
 
 
 ## 🎯 Pregunta de investigación
-<!-- > **Can we use a subset of the risk factors to accurately predict whether an individual has diabetes?** -->
 
-> **¿Podemos usar un subconjunto de los factores de riesgo para predecir con precisión si un individuo tiene diabetes?**
+> **¿Podemos utilizar un subconjunto reducido de las características del tumor para predecir con alta precisión si un caso es benigno o maligno?**
 
-Este estudio busca determinar:
-- si es posible predecir la presencia de diabetes usando solo algunas variables del BRFSS,
-- qué factores aportan mayor poder predictivo,
-- si un modelo reducido puede servir como herramienta de tamizaje poblacional.
+Este trabajo busca determinar:
+
+* si es posible obtener un modelo parsimonioso sin pérdida drástica de desempeño,
+* qué grupos de variables aportan mayor poder predictivo,
+* si un modelo compacto puede servir como herramienta explicativa,
+* y cómo se comparan varios modelos reducidos frente al modelo completo.
+
 
 
 ## 🧪 Dataset
-Se utiliza la versión:
-**`diabetes_binary_5050split_health_indicators_BRFSS2015.csv`**
 
-Características principales:
-- **70.692 personas encuestadas**
-- **Dataset balanceado** 50% sin diabetes, 50% con prediabetes o diabetes  
-- **Variable objetivo:**  
-  - `Diabetes_binary`  
-    - 0 = no diabetes  
-    - 1 = prediabetes o diabetes  
-- **21 variables predictoras** relacionadas a salud física, estilo de vida, actividad, IMC, edad, entre otros.
+Se analiza el archivo:
 
-Este dataset es especialmente adecuado para modelos de clasificación binaria al evitar problemas de desbalance en la variable objetivo.
+**`breast_cancer_wisconsin_diagnostic.csv`**
 
-## 🔍 Variables del estudio
+Características relevantes:
 
-### 🎯 Variable objetivo (dependiente)
-**Diabetes_binary**  
-- 0 = No diabetes  
-- 1 = Prediabetes o diabetes  
-Esta es la variable que buscamos predecir utilizando un subconjunto de factores de riesgo.
+* **569 observaciones**
+* **30 variables predictoras** + **1 variable objetivo**
+* Las variables corresponden a mediciones morfológicas derivadas de imágenes digitalizadas de biopsias
+* La variable objetivo es:
 
----
+  * `diagnosis`
 
-### 🧩 Variables predictoras
+    * B = “Benigno”
+    * M = “Maligno”
 
-| Variable | Significado |
-|---------|-------------|
-| **HighBP** | Diagnóstico de hipertensión arterial (1 = sí, 0 = no). |
-| **HighChol** | Diagnóstico de colesterol alto (1 = sí, 0 = no). |
-| **CholCheck** | Chequeo de colesterol en los últimos 5 años (1 = sí, 0 = no). |
-| **BMI** | Índice de masa corporal (kg/m²). |
-| **Smoker** | Ha fumado al menos 100 cigarrillos en su vida (1 = sí, 0 = no). |
-| **Stroke** | Ha sufrido un accidente cerebrovascular (1 = sí, 0 = no). |
-| **HeartDiseaseorAttack** | Infarto, angina o enfermedad coronaria (1 = sí, 0 = no). |
-| **PhysActivity** | Actividad física en los últimos 30 días (1 = sí, 0 = no). |
-| **Fruits** | Consume frutas diariamente (1 = sí, 0 = no). |
-| **Veggies** | Consume vegetales diariamente (1 = sí, 0 = no). |
-| **HvyAlcoholConsump** | Consumo excesivo de alcohol (1 = sí, 0 = no). |
-| **AnyHealthcare** | Tiene cobertura de salud o seguro médico (1 = sí, 0 = no). |
-| **NoDocbcCost** | Requirió atención médica pero no pudo pagar (1 = sí, 0 = no). |
-| **GenHlth** | Salud general percibida (escala 1–5). |
-| **MentHlth** | Días con mala salud mental en el último mes (0–30). |
-| **PhysHlth** | Días con mala salud física en el último mes (0–30). |
-| **DiffWalk** | Dificultad para caminar o subir escaleras (1 = sí, 0 = no). |
-| **Sex** | 0 = mujer, 1 = hombre. |
-| **Age** | Categoría de edad (escala 1–13). |
-| **Education** | Nivel educativo (escala 1–6). |
-| **Income** | Nivel de ingresos (escala 1–8). |
-
----
-
-## Diccionario de escalas (según Codebook BRFSS 2015)
-
-Estas son las variables que poseen escalas ordinales específicas.  
-Fuente oficial: https://www.cdc.gov/brfss/annual_data/2015/pdf/codebook15_llcp.pdf
-
-
-### Age — `_AGEG5YR`
-Categorías de edad en intervalos de 5 años.
-
-| Valor | Rango |
-|-------|--------|
-| 1 | 18–24 años |
-| 2 | 25–29 años |
-| 3 | 30–34 años |
-| 4 | 35–39 años |
-| 5 | 40–44 años |
-| 6 | 45–49 años |
-| 7 | 50–54 años |
-| 8 | 55–59 años |
-| 9 | 60–64 años |
-| 10 | 65–69 años |
-| 11 | 70–74 años |
-| 12 | 75–79 años |
-| 13 | 80 años o más |
-| 14 | Don’t know / Refused / Missing |
-
----
-
-### Education — `EDUCA`
-Nivel educativo alcanzado.
-
-| Valor | Nivel |
-|-------|--------|
-| 1 | Nunca asistió / solo kindergarten |
-| 2 | Grados 1–8 |
-| 3 | Grados 9–11 |
-| 4 | Grado 12 o GED |
-| 5 | College 1–3 años |
-| 6 | College 4+ años |
-| 9 | Refused |
-
----
-
-### Income — `INCOME2`
-Rango de ingresos del hogar al año.
-
-| Valor | Ingresos |
-|-------|-----------|
-| 1 | < $10,000 |
-| 2 | $10,000–14,999 |
-| 3 | $15,000–19,999 |
-| 4 | $20,000–24,999 |
-| 5 | $25,000–34,999 |
-| 6 | $35,000–49,999 |
-| 7 | $50,000–74,999 |
-| 8 | ≥ $75,000 |
-| 77 | Don’t know |
-| 99 | Refused |
-
----
-
-### GenHlth
-Salud general percibida.
-
-| Valor | Estado |
-|-------|---------|
-| 1 | Excelente |
-| 2 | Muy buena |
-| 3 | Buena |
-| 4 | Regular |
-| 5 | Mala |
+Para facilitar el análisis y evitar redundancias, se consideran solo las variables que terminan en **`_mean`**, que representan el valor promedio de cada característica por imagen.
+Este filtrado es una **decisión técnica** para limpiar el dataset y evitar multicolinealidad entre versiones `_mean`, `_se` y `_worst` de las mismas variables.
 
 
 
+## 🧩 Variables del estudio
+En este trabajo analizamos las características morfológicas extraídas de imágenes digitalizadas de biopsias de mama. Todas las variables predictoras provienen de mediciones computacionales realizadas sobre contornos, texturas y propiedades geométricas del tejido.
 
+El objetivo es determinar si un subconjunto reducido de estas características permite predecir con precisión si un tumor es benigno o maligno.
+
+### Variable objetivo (dependiente)
+
+| Valor       | Significado                   |
+| ----------- | ----------------------------- |
+| **Benigno** | Tumor no cancerígeno          |
+| **Maligno** | Tumor cancerígeno (carcinoma) |
+
+
+### Variables predictoras
+Del dataset completo (10 variables × 3 versiones), se seleccionaron solo las variables que terminan en _mean, puesto que: representan el valor promedio por imagen, reducen multicolinealidad con las versiones _se y _worst, permiten modelos más estables, interpretables y comparables,
+
+| Variable                   | Significado                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| **radius_mean**            | Promedio de la distancia desde el centro del tumor hasta su perímetro (tamaño general).          |
+| **texture_mean**           | Variación de niveles de gris en la imagen (relacionada con homogeneidad del tejido).             |
+| **perimeter_mean**         | Longitud promedio del contorno del tumor.                                                        |
+| **area_mean**              | Área promedio del tumor en la imagen.                                                            |
+| **smoothness_mean**        | Variación local del radio; mide irregularidades a pequeña escala del contorno.                   |
+| **compactness_mean**       | Relación entre perímetro y área; indica qué tan “compacto” o extendido es el tumor.              |
+| **concavity_mean**         | Grado de concavidad del contorno (depresiones o curvas hacia adentro).                           |
+| **concave.points_mean**    | Número y profundidad de puntos cóncavos en el tumor (muy discriminante entre benigno y maligno). |
+| **symmetry_mean**          | Medida de simetría global del tumor.                                                             |
+| **fractal_dimension_mean** | Complejidad geométrica del contorno (aproximación a un fractal).                                 |

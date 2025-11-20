@@ -59,7 +59,7 @@ modelo_compacto <- glm(
 # 4. DIAGNÓSTICOS DE LOS MODELOS
 # =====================================================================
 
-pdf("diagnosticos_modelos.pdf", width = 10, height = 10)
+pdf("graphics/diagnosticos_modelos.pdf", width = 10, height = 10)
 
 modelos <- list(
   "Modelo completo"      = modelo,
@@ -81,7 +81,7 @@ dev.off()
 # 5. PAIRS PLOT (GGPAIRS)
 # =====================================================================
 
-pdf("pairs_wdbc.pdf", width = 20, height = 20)
+pdf("graphics/pairs_wdbc.pdf", width = 20, height = 20)
 
 # g <- ggpairs(
   vars,
@@ -109,7 +109,7 @@ corr_mat <- abs(cor(vars))
 corr_colors <- dmat.color(corr_mat)
 order_vars <- order.single(corr_mat)
 
-pdf("cpairs_wdbc.pdf", width = 20, height = 20)
+pdf("graphics/cpairs_wdbc.pdf", width = 20, height = 20)
 
 par(cex = 0.6)
 par(cex.axis = 0.5)
@@ -134,7 +134,7 @@ pca <- prcomp(vars, scale.=TRUE)
 scores <- as.data.frame(pca$x[, 1:2])
 scores$diagnosis <- df$diagnosis
 
-pdf("pca_scores.pdf", width=8, height=6)
+pdf("graphics/pca_scores.pdf", width=8, height=6)
 
 ggplot(scores, aes(PC1, PC2, color=diagnosis)) +
   geom_point(alpha=0.6, size=2) +
@@ -154,7 +154,7 @@ M_ord <- M[hc$order, hc$order]
 M_melt <- melt(M_ord)
 colnames(M_melt) <- c("Var1", "Var2", "Cor")
 
-pdf("heatmap_wdbc.pdf", width=14, height=12)
+pdf("graphics/heatmap_wdbc.pdf", width=14, height=12)
 
 ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
   geom_tile(color = "white", size = 0.1) +
@@ -185,8 +185,8 @@ dev.off()
 # 9. GENERAR LOG DE RESULTADOS (summary, AIC, pseudo-R2)
 # =====================================================================
 
-sink("resultados_modelos.log")
-
+sink("resultados.log")
+  
 cat("==========================================================\n")
 cat(" ANÁLISIS DE REGRESIÓN LOGÍSTICA — WDBC (solo variables _mean)\n")
 cat(" Fecha de ejecución: ", as.character(Sys.time()), "\n")
