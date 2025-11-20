@@ -192,7 +192,6 @@ cat(" ANÁLISIS DE REGRESIÓN LOGÍSTICA — WDBC (solo variables _mean)\n")
 cat(" Fecha de ejecución: ", as.character(Sys.time()), "\n")
 cat("==========================================================\n\n\n")
 
-# --- AIC ---
 cat("==========================================================\n")
 cat(" COMPARACIÓN DE MODELOS POR AIC\n")
 cat("==========================================================\n")
@@ -200,7 +199,6 @@ print(AIC(modelo, modelo_clinico, modelo_estilo,
           modelo_morfologico, modelo_compacto))
 cat("\n\n")
 
-# --- Pseudo-R2 ---
 cat("==========================================================\n")
 cat(" PSEUDO-R² (McFadden, Cox–Snell, Nagelkerke)\n")
 cat("==========================================================\n\n")
@@ -225,7 +223,6 @@ cat("Modelo compacto:\n")
 print(pR2(modelo_compacto))
 cat("\n\n")
 
-# --- Summary detallado de cada modelo ---
 cat("==========================================================\n")
 cat(" SUMMARY COMPLETOS DE LOS MODELOS\n")
 cat("==========================================================\n\n")
