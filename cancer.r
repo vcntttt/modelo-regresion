@@ -27,46 +27,45 @@ vars <- df[, setdiff(names(df), "diagnosis")]
 # 2. MODELOS LOGÍSTICOS
 # =====================================================================
 
-modelo <- glm(diagnosis ~ ., data=df, family=binomial)
+modelo_completo <- glm(diagnosis ~ ., data=df, family=binomial)
 
-modelo_clinico <- glm(
-  diagnosis ~ radius_mean + perimeter_mean + area_mean +
-               concavity_mean + concave.points_mean,
-  data=df, family=binomial
+modelo_A <- glm(
+  diagnosis ~ radius_mean + concave.points_mean + texture_mean,
+  data = df,
+  family = binomial
 )
 
-modelo_estilo <- glm(
-  diagnosis ~ texture_mean + smoothness_mean +
-               compactness_mean + symmetry_mean,
-  data=df, family=binomial
+modelo_B <- glm(
+  diagnosis ~ concave.points_mean + texture_mean,
+  data = df,
+  family = binomial
 )
 
-modelo_morfologico <- glm(
-  diagnosis ~ radius_mean +
-    concavity_mean +
-    concave.points_mean +
-    symmetry_mean,
-  data=df,
-  family=binomial
+modelo_C <- glm(
+  diagnosis ~ radius_mean + concave.points_mean,
+  data = df,
+  family = binomial
 )
 
-modelo_compacto <- glm(
-  diagnosis ~ radius_mean + concavity_mean,
-  data=df, family=binomial
+modelo_D <- glm(
+  diagnosis ~ radius_mean + concave.points_mean + symmetry_mean,
+  data = df,
+  family = binomial
 )
+
 
 # =====================================================================
 # 4. DIAGNÓSTICOS DE LOS MODELOS
 # =====================================================================
 
-pdf("graphics/diagnosticos_modelos.pdf", width = 10, height = 10)
+pdf("plots/diagnosticos_modelos.pdf", width = 10, height = 10)
 
 modelos <- list(
-  "Modelo completo"      = modelo,
-  "Modelo clínico"       = modelo_clinico,
-  "Modelo estilo"        = modelo_estilo,
-  "Modelo morfológico"   = modelo_morfologico,
-  "Modelo compacto"      = modelo_compacto
+  "Modelo completo"      = modelo_completo,
+  "Modelo A"             = modelo_A,
+  "Modelo B"             = modelo_B,
+  "Modelo C"             = modelo_C,
+  "Modelo D"             = modelo_D
 )
 
 for (nombre in names(modelos)) {
@@ -81,9 +80,9 @@ dev.off()
 # 5. PAIRS PLOT (GGPAIRS)
 # =====================================================================
 
-pdf("graphics/pairs_wdbc.pdf", width = 20, height = 20)
+pdf("plots/pairs_wdbc.pdf", width = 20, height = 20)
 
-# g <- ggpairs(
+g <- ggpairs(
   vars,
   title = "Interacción entre variables predictoras — WDBC",
   upper = list(continuous = wrap("cor", size = 3)),
@@ -109,7 +108,7 @@ corr_mat <- abs(cor(vars))
 corr_colors <- dmat.color(corr_mat)
 order_vars <- order.single(corr_mat)
 
-pdf("graphics/cpairs_wdbc.pdf", width = 20, height = 20)
+pdf("plots/cpairs_wdbc.pdf", width = 20, height = 20)
 
 par(cex = 0.6)
 par(cex.axis = 0.5)
@@ -134,7 +133,7 @@ pca <- prcomp(vars, scale.=TRUE)
 scores <- as.data.frame(pca$x[, 1:2])
 scores$diagnosis <- df$diagnosis
 
-pdf("graphics/pca_scores.pdf", width=8, height=6)
+pdf("plots/pca_scores.pdf", width=8, height=6)
 
 ggplot(scores, aes(PC1, PC2, color=diagnosis)) +
   geom_point(alpha=0.6, size=2) +
@@ -154,7 +153,7 @@ M_ord <- M[hc$order, hc$order]
 M_melt <- melt(M_ord)
 colnames(M_melt) <- c("Var1", "Var2", "Cor")
 
-pdf("graphics/heatmap_wdbc.pdf", width=14, height=12)
+pdf("plots/heatmap_wdbc.pdf", width=14, height=12)
 
 ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
   geom_tile(color = "white", size = 0.1) +
@@ -195,8 +194,8 @@ cat("==========================================================\n\n\n")
 cat("==========================================================\n")
 cat(" COMPARACIÓN DE MODELOS POR AIC\n")
 cat("==========================================================\n")
-print(AIC(modelo, modelo_clinico, modelo_estilo,
-          modelo_morfologico, modelo_compacto))
+print(AIC(modelo_completo, modelo_A, modelo_B,
+          modelo_C, modelo_D))
 cat("\n\n")
 
 cat("==========================================================\n")
@@ -204,36 +203,28 @@ cat(" PSEUDO-R² (McFadden, Cox–Snell, Nagelkerke)\n")
 cat("==========================================================\n\n")
 
 cat("Modelo completo:\n")
-print(pR2(modelo))
+print(pR2(modelo_completo))
 cat("\n\n")
 
-cat("Modelo clínico:\n")
-print(pR2(modelo_clinico))
+cat("Modelo A:\n")
+print(pR2(modelo_A))
 cat("\n\n")
 
-cat("Modelo estilo:\n")
-print(pR2(modelo_estilo))
+cat("Modelo B:\n")
+print(pR2(modelo_B))
 cat("\n\n")
 
-cat("Modelo morfológico:\n")
-print(pR2(modelo_morfologico))
+cat("Modelo C:\n")
+print(pR2(modelo_C))
 cat("\n\n")
 
-cat("Modelo compacto:\n")
-print(pR2(modelo_compacto))
+cat("Modelo D:\n")
+print(pR2(modelo_D))
 cat("\n\n")
 
 cat("==========================================================\n")
-cat(" SUMMARY COMPLETOS DE LOS MODELOS\n")
+cat(" SUMMARYS DE LOS MODELOS\n")
 cat("==========================================================\n\n")
-
-modelos <- list(
-  "Modelo completo"      = modelo,
-  "Modelo clínico"       = modelo_clinico,
-  "Modelo estilo"        = modelo_estilo,
-  "Modelo morfológico"   = modelo_morfologico,
-  "Modelo compacto"      = modelo_compacto
-)
 
 for (nombre in names(modelos)) {
   cat("----------------------------------------------------------\n")

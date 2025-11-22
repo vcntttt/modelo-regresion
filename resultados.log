@@ -1,11 +1,56 @@
 ==========================================================
  ANÁLISIS DE REGRESIÓN LOGÍSTICA — WDBC (solo variables _mean)
- Fecha de ejecución:  2025-11-20 10:35:48.526765 
+ Fecha de ejecución:  2025-11-22 18:30:09.299251 
 ==========================================================
 
 
 ==========================================================
- SUMMARY COMPLETOS DE LOS MODELOS
+ COMPARACIÓN DE MODELOS POR AIC
+==========================================================
+                df      AIC
+modelo_completo 11 168.1304
+modelo_A         4 172.3833
+modelo_B         3 209.3402
+modelo_C         3 215.2371
+modelo_D         4 215.6866
+
+
+==========================================================
+ PSEUDO-R² (McFadden, Cox–Snell, Nagelkerke)
+==========================================================
+
+Modelo completo:
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+ -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
+
+
+Modelo A:
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+ -82.1916671 -375.7200027  587.0566711    0.7812422    0.6436116    0.8780109 
+
+
+Modelo B:
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+-101.6700908 -375.7200027  548.0998237    0.7293993    0.6183566    0.8435582 
+
+
+Modelo C:
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+-104.6185421 -375.7200027  542.2029212    0.7215518    0.6143808    0.8381345 
+
+
+Modelo D:
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+-103.8432897 -375.7200027  543.7534260    0.7236152    0.6154302    0.8395661 
+
+
+==========================================================
+ SUMMARYS DE LOS MODELOS
 ==========================================================
 
 ----------------------------------------------------------
@@ -42,159 +87,108 @@ Number of Fisher Scoring iterations: 9
 
 
 ----------------------------------------------------------
-  Modelo clínico 
+  Modelo A 
 ----------------------------------------------------------
 
 Call:
-glm(formula = diagnosis ~ radius_mean + perimeter_mean + area_mean + 
-    concavity_mean + concave.points_mean, family = binomial, 
-    data = df)
+glm(formula = diagnosis ~ radius_mean + concave.points_mean + 
+    texture_mean, family = binomial, data = df)
 
 Coefficients:
-                    Estimate Std. Error z value Pr(>|z|)    
-(Intercept)          5.73493    7.49853   0.765   0.4444    
-radius_mean         -2.12784    2.20132  -0.967   0.3337    
-perimeter_mean      -0.01387    0.25822  -0.054   0.9572    
-area_mean            0.03341    0.01294   2.583   0.0098 ** 
-concavity_mean       1.56923    6.25950   0.251   0.8020    
-concave.points_mean 83.52433   16.93856   4.931 8.18e-07 ***
+                     Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -21.16474    2.51027  -8.431  < 2e-16 ***
+radius_mean           0.65637    0.12532   5.238 1.63e-07 ***
+concave.points_mean 101.16839   13.02057   7.770 7.86e-15 ***
+texture_mean          0.32593    0.05529   5.895 3.75e-09 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
     Null deviance: 751.44  on 568  degrees of freedom
-Residual deviance: 200.34  on 563  degrees of freedom
-AIC: 212.34
+Residual deviance: 164.38  on 565  degrees of freedom
+AIC: 172.38
 
 Number of Fisher Scoring iterations: 8
 
 
 
 ----------------------------------------------------------
-  Modelo estilo 
+  Modelo B 
 ----------------------------------------------------------
 
 Call:
-glm(formula = diagnosis ~ texture_mean + smoothness_mean + compactness_mean + 
-    symmetry_mean, family = binomial, data = df)
+glm(formula = diagnosis ~ concave.points_mean + texture_mean, 
+    family = binomial, data = df)
 
 Coefficients:
-                  Estimate Std. Error z value Pr(>|z|)    
-(Intercept)      -10.17419    1.55479  -6.544 6.00e-11 ***
-texture_mean       0.25787    0.03373   7.644 2.11e-14 ***
-smoothness_mean    7.77907   12.61231   0.617    0.537    
-compactness_mean  36.28436    4.34788   8.345  < 2e-16 ***
-symmetry_mean     -0.37741    5.82322  -0.065    0.948    
+                     Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -12.94222    1.39081  -9.306  < 2e-16 ***
+concave.points_mean 119.69016   11.48827  10.418  < 2e-16 ***
+texture_mean          0.32881    0.04994   6.584 4.58e-11 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
     Null deviance: 751.44  on 568  degrees of freedom
-Residual deviance: 434.83  on 564  degrees of freedom
-AIC: 444.83
+Residual deviance: 203.34  on 566  degrees of freedom
+AIC: 209.34
 
-Number of Fisher Scoring iterations: 5
+Number of Fisher Scoring iterations: 7
 
 
 
 ----------------------------------------------------------
-  Modelo morfológico 
+  Modelo C 
 ----------------------------------------------------------
 
 Call:
-glm(formula = diagnosis ~ radius_mean + concavity_mean + concave.points_mean + 
+glm(formula = diagnosis ~ radius_mean + concave.points_mean, 
+    family = binomial, data = df)
+
+Coefficients:
+                    Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -13.6989     1.5738  -8.705  < 2e-16 ***
+radius_mean           0.6389     0.1076   5.937  2.9e-09 ***
+concave.points_mean  84.2236     9.9594   8.457  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 209.24  on 566  degrees of freedom
+AIC: 215.24
+
+Number of Fisher Scoring iterations: 7
+
+
+
+----------------------------------------------------------
+  Modelo D 
+----------------------------------------------------------
+
+Call:
+glm(formula = diagnosis ~ radius_mean + concave.points_mean + 
     symmetry_mean, family = binomial, data = df)
 
 Coefficients:
                     Estimate Std. Error z value Pr(>|z|)    
-(Intercept)         -16.4075     2.6477  -6.197 5.76e-10 ***
-radius_mean           0.7360     0.1264   5.823 5.78e-09 ***
-concavity_mean        5.4824     5.3346   1.028    0.304    
-concave.points_mean  64.2512    16.1948   3.967 7.27e-05 ***
-symmetry_mean        10.0652     9.0681   1.110    0.267    
+(Intercept)         -16.2068     2.6275  -6.168 6.91e-10 ***
+radius_mean           0.7016     0.1205   5.824 5.75e-09 ***
+concave.points_mean  75.9353    11.6650   6.510 7.53e-11 ***
+symmetry_mean        11.1253     8.9395   1.245    0.213    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
     Null deviance: 751.44  on 568  degrees of freedom
-Residual deviance: 206.61  on 564  degrees of freedom
-AIC: 216.61
+Residual deviance: 207.69  on 565  degrees of freedom
+AIC: 215.69
 
 Number of Fisher Scoring iterations: 7
 
-
-
-----------------------------------------------------------
-  Modelo compacto 
-----------------------------------------------------------
-
-Call:
-glm(formula = diagnosis ~ radius_mean + concavity_mean, family = binomial, 
-    data = df)
-
-Coefficients:
-               Estimate Std. Error z value Pr(>|z|)    
-(Intercept)    -16.1466     1.6359  -9.870  < 2e-16 ***
-radius_mean      0.9308     0.1087   8.560  < 2e-16 ***
-concavity_mean  27.3387     3.4189   7.996 1.28e-15 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 751.44  on 568  degrees of freedom
-Residual deviance: 230.85  on 566  degrees of freedom
-AIC: 236.85
-
-Number of Fisher Scoring iterations: 7
-
-
-
-==========================================================
- COMPARACIÓN DE MODELOS POR AIC
-==========================================================
-                   df      AIC
-modelo             11 168.1304
-modelo_clinico      6 212.3409
-modelo_estilo       5 444.8330
-modelo_morfologico  5 216.6069
-modelo_compacto     3 236.8529
-
-
-==========================================================
- PSEUDO-R² (McFadden, Cox–Snell, Nagelkerke)
-==========================================================
-
-Modelo completo:
-fitting null model for pseudo-r2
-         llh      llhNull           G2     McFadden         r2ML         r2CU 
- -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
-
-
-Modelo clínico:
-fitting null model for pseudo-r2
-         llh      llhNull           G2     McFadden         r2ML         r2CU 
--100.1704404 -375.7200027  551.0991246    0.7333907    0.6203630    0.8462954 
-
-
-Modelo estilo:
-fitting null model for pseudo-r2
-         llh      llhNull           G2     McFadden         r2ML         r2CU 
--217.4164828 -375.7200027  316.6070398    0.4213338    0.4267464    0.5821649 
-
-
-Modelo morfológico:
-fitting null model for pseudo-r2
-         llh      llhNull           G2     McFadden         r2ML         r2CU 
--103.3034641 -375.7200027  544.8330771    0.7250520    0.6161592    0.8405606 
-
-
-Modelo compacto:
-fitting null model for pseudo-r2
-         llh      llhNull           G2     McFadden         r2ML         r2CU 
--115.4264509 -375.7200027  520.5871036    0.6927860    0.5994497    0.8177655 
 
 
