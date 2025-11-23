@@ -135,12 +135,14 @@ scores$diagnosis <- df$diagnosis
 
 pdf("plots/pca_scores.pdf", width=8, height=6)
 
-ggplot(scores, aes(PC1, PC2, color=diagnosis)) +
+p <- ggplot(scores, aes(PC1, PC2, color=diagnosis)) +
   geom_point(alpha=0.6, size=2) +
   stat_ellipse(level=0.95, linetype="solid") +
   theme_minimal(base_size = 18) +
-  scale_color_manual(values=c("#1E88E5","#E53935"))
+  scale_color_manual(values=c("#1E88E5","#E53935")) +
+  labs(title = "Análisis de Componentes Principales (PCA)")
 
+print(p)
 dev.off()
 
 # =====================================================================
@@ -155,8 +157,8 @@ colnames(M_melt) <- c("Var1", "Var2", "Cor")
 
 pdf("plots/heatmap_wdbc.pdf", width=14, height=12)
 
-ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
-  geom_tile(color = "white", size = 0.1) +
+p <- ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
+  geom_tile(color = "white", linewidth = 0.1) +
   scale_fill_gradient2(
     low = "#2166ac", mid = "white", high = "#b2182b",
     midpoint = 0, limits = c(-1,1),
@@ -170,7 +172,7 @@ ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
     legend.title = element_text(size = 14, face = "bold"),
     legend.text = element_text(size = 12),
     panel.grid = element_blank(),
-    panel.border = element_rect(color="black", fill=NA, size=0.3)
+    panel.border = element_rect(color="black", fill=NA, linewidth=0.3)
   ) +
   labs(
     title = "Mapa de calor de correlaciones — WDBC",
@@ -178,6 +180,7 @@ ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
     y = ""
   )
 
+print(p)
 dev.off()
 
 # =====================================================================
