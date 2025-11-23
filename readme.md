@@ -36,8 +36,8 @@ Características relevantes:
 
   * `diagnosis`
 
-    * B = “Benigno”
-    * M = “Maligno”
+    * B = “Benigno” (0)
+    * M = “Maligno” (1)
 
 Para facilitar el análisis y evitar redundancias, se consideran solo las variables que terminan en **`_mean`**, que representan el valor promedio de cada característica por imagen.
 Este filtrado es una **decisión técnica** para limpiar el dataset y evitar multicolinealidad entre versiones `_mean`, `_se` y `_worst` de las mismas variables.
