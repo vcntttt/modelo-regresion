@@ -1,0 +1,438 @@
+==========================================================
+ ANÁLISIS DE REGRESIÓN LOGÍSTICA — WDBC (solo variables _mean)
+ Fecha de ejecución:  2025-11-23 18:28:53.655698 
+==========================================================
+
+
+==========================================================
+ COMPARACIÓN DE MODELOS POR AIC
+==========================================================
+              Model      AIC
+6      Modelo LASSO 166.1883
+1   Modelo completo 168.1304
+8      Modelo RIDGE 168.1304
+9 Modelo RIDGE 1-SE 168.1304
+7 Modelo LASSO 1-SE 169.3819
+2          Modelo A 172.3833
+3          Modelo B 209.3402
+4          Modelo C 215.2371
+5          Modelo D 215.6866
+
+
+==========================================================
+ PSEUDO-R² (McFadden, Cox–Snell, Nagelkerke)
+==========================================================
+
+Modelo completo :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+ -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
+
+Modelo A :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+ -82.1916671 -375.7200027  587.0566711    0.7812422    0.6436116    0.8780109 
+
+Modelo B :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+-101.6700908 -375.7200027  548.0998237    0.7293993    0.6183566    0.8435582 
+
+Modelo C :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+-104.6185421 -375.7200027  542.2029212    0.7215518    0.6143808    0.8381345 
+
+Modelo D :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+-103.8432897 -375.7200027  543.7534260    0.7236152    0.6154302    0.8395661 
+
+Modelo LASSO :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+ -75.0941644 -375.7200027  601.2516767    0.8001326    0.6523925    0.8899898 
+
+Modelo LASSO 1-SE :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+ -78.6909653 -375.7200027  594.0580748    0.7905596    0.6479700    0.8839566 
+
+Modelo RIDGE :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+ -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
+
+Modelo RIDGE 1-SE :
+fitting null model for pseudo-r2
+         llh      llhNull           G2     McFadden         r2ML         r2CU 
+ -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
+
+==========================================================
+ MODELO LASSO — VARIABLES SELECCIONADAS
+==========================================================
+
+λ óptimo (lambda.min):  0.003584205 
+λ 1-SE (lambda.1se):  0.01318407 
+
+Variables seleccionadas por LASSO (lambda.min):
+[1] "texture_mean"           "area_mean"              "smoothness_mean"       
+[4] "concavity_mean"         "concave.points_mean"    "symmetry_mean"         
+[7] "fractal_dimension_mean"
+
+
+Coeficientes LASSO (lambda.min):
+11 x 1 sparse Matrix of class "dgCMatrix"
+                         lambda.min
+(Intercept)            -19.22752886
+radius_mean              .         
+texture_mean             0.29579110
+perimeter_mean           .         
+area_mean                0.00833129
+smoothness_mean         42.82840433
+compactness_mean         .         
+concavity_mean           5.24227911
+concave.points_mean     55.85262076
+symmetry_mean           10.98243317
+fractal_dimension_mean -26.85910351
+
+
+Variables seleccionadas por LASSO (lambda.1se):
+[1] "radius_mean"         "texture_mean"        "smoothness_mean"    
+[4] "concave.points_mean" "symmetry_mean"      
+
+
+Coeficientes LASSO (lambda.1se):
+11 x 1 sparse Matrix of class "dgCMatrix"
+                        lambda.1se
+(Intercept)            -14.8669056
+radius_mean              0.4380092
+texture_mean             0.2010973
+perimeter_mean           .        
+area_mean                .        
+smoothness_mean          3.4314329
+compactness_mean         .        
+concavity_mean           .        
+concave.points_mean     64.7218804
+symmetry_mean            3.7721126
+fractal_dimension_mean   .        
+
+
+==========================================================
+ MODELO RIDGE — VARIABLES (lambda.min y 1-SE)
+==========================================================
+
+λ Ridge mínimo (lambda.min):  0.0375487 
+λ Ridge 1-SE (lambda.1se):  0.04963717 
+
+Variables (ridge.lambda.min):
+ [1] "radius_mean"            "texture_mean"           "perimeter_mean"        
+ [4] "area_mean"              "smoothness_mean"        "compactness_mean"      
+ [7] "concavity_mean"         "concave.points_mean"    "symmetry_mean"         
+[10] "fractal_dimension_mean"
+
+Coeficientes Ridge (lambda.min):
+11 x 1 sparse Matrix of class "dgCMatrix"
+                          lambda.min
+(Intercept)            -13.604451217
+radius_mean              0.175092490
+texture_mean             0.150821482
+perimeter_mean           0.025065805
+area_mean                0.001657893
+smoothness_mean         26.819934476
+compactness_mean         5.362224357
+concavity_mean           6.622874074
+concave.points_mean     18.066392046
+symmetry_mean            8.920802901
+fractal_dimension_mean -32.085162981
+
+
+Variables (ridge.lambda.1se):
+ [1] "radius_mean"            "texture_mean"           "perimeter_mean"        
+ [4] "area_mean"              "smoothness_mean"        "compactness_mean"      
+ [7] "concavity_mean"         "concave.points_mean"    "symmetry_mean"         
+[10] "fractal_dimension_mean"
+
+Coeficientes Ridge (lambda.1se):
+11 x 1 sparse Matrix of class "dgCMatrix"
+                         lambda.1se
+(Intercept)            -12.58741088
+radius_mean              0.16249417
+texture_mean             0.13444323
+perimeter_mean           0.02333442
+area_mean                0.00153083
+smoothness_mean         23.64900894
+compactness_mean         5.41765802
+concavity_mean           6.12221513
+concave.points_mean     16.45433627
+symmetry_mean            8.24314209
+fractal_dimension_mean -27.85251077
+
+
+==========================================================
+ SUMMARYS DE LOS MODELOS
+==========================================================
+
+----------------------------------------------------------
+  Modelo completo 
+----------------------------------------------------------
+
+Call:
+glm(formula = diagnosis ~ ., family = binomial, data = df)
+
+Coefficients:
+                        Estimate Std. Error z value Pr(>|z|)    
+(Intercept)             -7.35952   12.85259  -0.573   0.5669    
+radius_mean             -2.04930    3.71588  -0.551   0.5813    
+texture_mean             0.38473    0.06454   5.961  2.5e-09 ***
+perimeter_mean          -0.07151    0.50516  -0.142   0.8874    
+area_mean                0.03980    0.01674   2.377   0.0174 *  
+smoothness_mean         76.43227   31.95492   2.392   0.0168 *  
+compactness_mean        -1.46242   20.34249  -0.072   0.9427    
+concavity_mean           8.46870    8.12003   1.043   0.2970    
+concave.points_mean     66.82176   28.52910   2.342   0.0192 *  
+symmetry_mean           16.27824   10.63059   1.531   0.1257    
+fractal_dimension_mean -68.33703   85.55666  -0.799   0.4244    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 146.13  on 558  degrees of freedom
+AIC: 168.13
+
+Number of Fisher Scoring iterations: 9
+
+
+
+----------------------------------------------------------
+  Modelo A 
+----------------------------------------------------------
+
+Call:
+glm(formula = diagnosis ~ radius_mean + concave.points_mean + 
+    texture_mean, family = binomial, data = df)
+
+Coefficients:
+                     Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -21.16474    2.51027  -8.431  < 2e-16 ***
+radius_mean           0.65637    0.12532   5.238 1.63e-07 ***
+concave.points_mean 101.16839   13.02057   7.770 7.86e-15 ***
+texture_mean          0.32593    0.05529   5.895 3.75e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 164.38  on 565  degrees of freedom
+AIC: 172.38
+
+Number of Fisher Scoring iterations: 8
+
+
+
+----------------------------------------------------------
+  Modelo B 
+----------------------------------------------------------
+
+Call:
+glm(formula = diagnosis ~ concave.points_mean + texture_mean, 
+    family = binomial, data = df)
+
+Coefficients:
+                     Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -12.94222    1.39081  -9.306  < 2e-16 ***
+concave.points_mean 119.69016   11.48827  10.418  < 2e-16 ***
+texture_mean          0.32881    0.04994   6.584 4.58e-11 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 203.34  on 566  degrees of freedom
+AIC: 209.34
+
+Number of Fisher Scoring iterations: 7
+
+
+
+----------------------------------------------------------
+  Modelo C 
+----------------------------------------------------------
+
+Call:
+glm(formula = diagnosis ~ radius_mean + concave.points_mean, 
+    family = binomial, data = df)
+
+Coefficients:
+                    Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -13.6989     1.5738  -8.705  < 2e-16 ***
+radius_mean           0.6389     0.1076   5.937  2.9e-09 ***
+concave.points_mean  84.2236     9.9594   8.457  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 209.24  on 566  degrees of freedom
+AIC: 215.24
+
+Number of Fisher Scoring iterations: 7
+
+
+
+----------------------------------------------------------
+  Modelo D 
+----------------------------------------------------------
+
+Call:
+glm(formula = diagnosis ~ radius_mean + concave.points_mean + 
+    symmetry_mean, family = binomial, data = df)
+
+Coefficients:
+                    Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -16.2068     2.6275  -6.168 6.91e-10 ***
+radius_mean           0.7016     0.1205   5.824 5.75e-09 ***
+concave.points_mean  75.9353    11.6650   6.510 7.53e-11 ***
+symmetry_mean        11.1253     8.9395   1.245    0.213    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 207.69  on 565  degrees of freedom
+AIC: 215.69
+
+Number of Fisher Scoring iterations: 7
+
+
+
+----------------------------------------------------------
+  Modelo LASSO 
+----------------------------------------------------------
+
+Call:
+glm(formula = formula_lasso, family = binomial, data = df)
+
+Coefficients:
+                         Estimate Std. Error z value Pr(>|z|)    
+(Intercept)            -23.865755   5.448737  -4.380 1.19e-05 ***
+texture_mean             0.377121   0.062944   5.991 2.08e-09 ***
+area_mean                0.010960   0.002567   4.270 1.96e-05 ***
+smoothness_mean         82.880962  32.662155   2.538   0.0112 *  
+concavity_mean          14.015673   8.118219   1.726   0.0843 .  
+concave.points_mean     45.824763  25.554442   1.793   0.0729 .  
+symmetry_mean           16.626419  10.757017   1.546   0.1222    
+fractal_dimension_mean -87.491072  61.208108  -1.429   0.1529    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 150.19  on 561  degrees of freedom
+AIC: 166.19
+
+Number of Fisher Scoring iterations: 8
+
+
+
+----------------------------------------------------------
+  Modelo LASSO 1-SE 
+----------------------------------------------------------
+
+Call:
+glm(formula = formula_lasso_1se, family = binomial, data = df)
+
+Coefficients:
+                     Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -31.99441    5.23942  -6.106 1.02e-09 ***
+radius_mean           0.92241    0.17478   5.278 1.31e-07 ***
+texture_mean          0.37011    0.06136   6.031 1.62e-09 ***
+smoothness_mean      44.67579   25.15032   1.776   0.0757 .  
+concave.points_mean  72.16555   16.39140   4.403 1.07e-05 ***
+symmetry_mean        17.80564   10.33132   1.723   0.0848 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 157.38  on 563  degrees of freedom
+AIC: 169.38
+
+Number of Fisher Scoring iterations: 8
+
+
+
+----------------------------------------------------------
+  Modelo RIDGE 
+----------------------------------------------------------
+
+Call:
+glm(formula = formula_ridge_min, family = binomial, data = df)
+
+Coefficients:
+                        Estimate Std. Error z value Pr(>|z|)    
+(Intercept)             -7.35952   12.85259  -0.573   0.5669    
+radius_mean             -2.04930    3.71588  -0.551   0.5813    
+texture_mean             0.38473    0.06454   5.961  2.5e-09 ***
+perimeter_mean          -0.07151    0.50516  -0.142   0.8874    
+area_mean                0.03980    0.01674   2.377   0.0174 *  
+smoothness_mean         76.43227   31.95492   2.392   0.0168 *  
+compactness_mean        -1.46242   20.34249  -0.072   0.9427    
+concavity_mean           8.46870    8.12003   1.043   0.2970    
+concave.points_mean     66.82176   28.52910   2.342   0.0192 *  
+symmetry_mean           16.27824   10.63059   1.531   0.1257    
+fractal_dimension_mean -68.33703   85.55666  -0.799   0.4244    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 146.13  on 558  degrees of freedom
+AIC: 168.13
+
+Number of Fisher Scoring iterations: 9
+
+
+
+----------------------------------------------------------
+  Modelo RIDGE 1-SE 
+----------------------------------------------------------
+
+Call:
+glm(formula = formula_ridge_1se, family = binomial, data = df)
+
+Coefficients:
+                        Estimate Std. Error z value Pr(>|z|)    
+(Intercept)             -7.35952   12.85259  -0.573   0.5669    
+radius_mean             -2.04930    3.71588  -0.551   0.5813    
+texture_mean             0.38473    0.06454   5.961  2.5e-09 ***
+perimeter_mean          -0.07151    0.50516  -0.142   0.8874    
+area_mean                0.03980    0.01674   2.377   0.0174 *  
+smoothness_mean         76.43227   31.95492   2.392   0.0168 *  
+compactness_mean        -1.46242   20.34249  -0.072   0.9427    
+concavity_mean           8.46870    8.12003   1.043   0.2970    
+concave.points_mean     66.82176   28.52910   2.342   0.0192 *  
+symmetry_mean           16.27824   10.63059   1.531   0.1257    
+fractal_dimension_mean -68.33703   85.55666  -0.799   0.4244    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 751.44  on 568  degrees of freedom
+Residual deviance: 146.13  on 558  degrees of freedom
+AIC: 168.13
+
+Number of Fisher Scoring iterations: 9
+
+
+
