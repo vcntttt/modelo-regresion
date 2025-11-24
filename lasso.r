@@ -6,6 +6,9 @@ packages <- c(
 install.packages(setdiff(packages, rownames(installed.packages())))
 lapply(packages, library, character.only = TRUE)
 
+set.seed(1406)
+
+
 # =====================================================================
 # 1. CARGA DE DATOS Y FILTRO DE VARIABLES
 # =====================================================================
@@ -54,78 +57,78 @@ modelo_D <- glm(
 )
 
 # =====================================================================
-# 3. LASSO LOGÍSTICO (glmnet)
+# 3. PREPARACIÓN DE DATOS PARA REGULARIZACIÓN
 # =====================================================================
 
-# X como matriz (solo numéricas)
-X <- as.matrix(df[, -1])  
-
-# y como 0/1
+# Matriz de predictores y vector de respuesta binaria
+X <- as.matrix(df[, -1])
 y <- ifelse(df$diagnosis == "Maligno", 1, 0)
 
-set.seed(123)
+# =====================================================================
+# 4. LASSO LOGÍSTICO (L1 regularization)
+# =====================================================================
 
+# Cross-validation para encontrar lambda óptimo
 cv_lasso <- cv.glmnet(
   X, y,
   family = "binomial",
-  alpha = 1,           # LASSO puro
-  nfolds = 10
+  alpha = 1,              # LASSO (L1 penalty)
+  nfolds = 10,
+  type.measure = "class"
 )
 
-lambda_min <- cv_lasso$lambda.min
-lambda_1se <- cv_lasso$lambda.1se
+# lambdas óptimos
+lambda_min <- cv_lasso$lambda.min    # Mínimo error de CV
+lambda_1se <- cv_lasso$lambda.1se    # Regla 1-SE (más parsimonioso)
 
-# =====================================================================
-# 3.1. EXTRAER VARIABLES SELECCIONADAS POR LASSO
-# =====================================================================
-
-coef_min <- coef(cv_lasso, s="lambda.min")
-vars_lasso_min <- rownames(coef_min)[coef_min[,1] != 0]
+# --- Modelo LASSO con lambda.min ---
+coef_lasso_min <- coef(cv_lasso, s = "lambda.min")
+vars_lasso_min <- rownames(coef_lasso_min)[coef_lasso_min[, 1] != 0]
 vars_lasso_min <- vars_lasso_min[vars_lasso_min != "(Intercept)"]
 
-# Fórmula del modelo LASSO final
-formula_lasso <- as.formula(
-  paste("diagnosis ~", paste(vars_lasso_min, collapse=" + "))
+formula_lasso_min <- as.formula(
+  paste("diagnosis ~", paste(vars_lasso_min, collapse = " + "))
 )
+modelo_lasso_min <- glm(formula_lasso_min, data = df, family = binomial)
 
-modelo_lasso_glm <- glm(formula_lasso, data=df, family=binomial)
-
-
-coef_1se <- coef(cv_lasso, s="lambda.1se")
-vars_lasso_1se <- rownames(coef_1se)[coef_1se[,1] != 0]
+# --- Modelo LASSO con lambda.1se ---
+coef_lasso_1se <- coef(cv_lasso, s = "lambda.1se")
+vars_lasso_1se <- rownames(coef_lasso_1se)[coef_lasso_1se[, 1] != 0]
 vars_lasso_1se <- vars_lasso_1se[vars_lasso_1se != "(Intercept)"]
 
 formula_lasso_1se <- as.formula(
-  paste("diagnosis ~", paste(vars_lasso_1se, collapse=" + "))
+  paste("diagnosis ~", paste(vars_lasso_1se, collapse = " + "))
 )
+modelo_lasso_1se <- glm(formula_lasso_1se, data = df, family = binomial)
 
-modelo_lasso_1se_glm <- glm(formula_lasso_1se, data=df, family=binomial)
-# =====================================================================
-# 3.2 GUARDAR GRÁFICO DE LASSO
-# =====================================================================
-
-pdf("plots/lasso_cv_curve.pdf", width=8, height=6)
-plot(cv_lasso)
+# curva de CV de LASSO
+pdf("plots/modelos/lasso_cv_curve.pdf", width = 8, height = 6)
+plot(cv_lasso, main = "LASSO: Cross-Validation Curve")
+abline(v = log(lambda_min), col = "red", lty = 2)
+abline(v = log(lambda_1se), col = "blue", lty = 2)
+legend("topright", 
+       legend = c("lambda.min", "lambda.1se"),
+       col = c("red", "blue"), lty = 2, cex = 0.8)
 dev.off()
 
-
 # =====================================================================
-# 4. RIDGE LOGÍSTICO (glmnet alpha = 0)
+# 5. RIDGE LOGÍSTICO (L2 regularization)
 # =====================================================================
 
-set.seed(123)
-
+# Cross-validation para encontrar lambda óptimo
 cv_ridge <- cv.glmnet(
   X, y,
   family = "binomial",
-  alpha = 0,       # ridge puro
-  nfolds = 10
+  alpha = 0,              # Ridge (L2 penalty)
+  nfolds = 10,
+  type.measure = "class"
 )
 
-ridge_lambda_min  <- cv_ridge$lambda.min
-ridge_lambda_1se  <- cv_ridge$lambda.1se
+# lambdas óptimos
+lambda_ridge_min <- cv_ridge$lambda.min
+lambda_ridge_1se <- cv_ridge$lambda.1se
 
-# Coeficientes para lambda.min
+# --- Modelo RIDGE con lambda.min ---
 coef_ridge_min <- coef(cv_ridge, s = "lambda.min")
 vars_ridge_min <- rownames(coef_ridge_min)[coef_ridge_min[, 1] != 0]
 vars_ridge_min <- vars_ridge_min[vars_ridge_min != "(Intercept)"]
@@ -133,9 +136,9 @@ vars_ridge_min <- vars_ridge_min[vars_ridge_min != "(Intercept)"]
 formula_ridge_min <- as.formula(
   paste("diagnosis ~", paste(vars_ridge_min, collapse = " + "))
 )
-modelo_ridge_min_glm <- glm(formula_ridge_min, data = df, family = binomial)
+modelo_ridge_min <- glm(formula_ridge_min, data = df, family = binomial)
 
-# Coeficientes para lambda.1se
+# --- Modelo RIDGE con lambda.1se ---
 coef_ridge_1se <- coef(cv_ridge, s = "lambda.1se")
 vars_ridge_1se <- rownames(coef_ridge_1se)[coef_ridge_1se[, 1] != 0]
 vars_ridge_1se <- vars_ridge_1se[vars_ridge_1se != "(Intercept)"]
@@ -143,20 +146,25 @@ vars_ridge_1se <- vars_ridge_1se[vars_ridge_1se != "(Intercept)"]
 formula_ridge_1se <- as.formula(
   paste("diagnosis ~", paste(vars_ridge_1se, collapse = " + "))
 )
-modelo_ridge_1se_glm <- glm(formula_ridge_1se, data = df, family = binomial)
+modelo_ridge_1se <- glm(formula_ridge_1se, data = df, family = binomial)
 
-# Guardar gráfico
-pdf("plots/lasso/ridge_cv_curve.pdf", width = 8, height = 6)
-plot(cv_ridge)
+# curva de CV de RIDGE
+pdf("plots/modelos/ridge_cv_curve.pdf", width = 8, height = 6)
+plot(cv_ridge, main = "Ridge: Cross-Validation Curve")
+abline(v = log(lambda_ridge_min), col = "red", lty = 2)
+abline(v = log(lambda_ridge_1se), col = "blue", lty = 2)
+legend("topright", 
+       legend = c("lambda.min", "lambda.1se"),
+       col = c("red", "blue"), lty = 2, cex = 0.8)
 dev.off()
 
 
 
 # =====================================================================
-# 5. DIAGNÓSTICOS DE LOS MODELOS
+# 6. DIAGNÓSTICOS DE LOS MODELOS
 # =====================================================================
 
-pdf("plots/lasso/diagnosticos_modelos.pdf", width = 10, height = 10)
+pdf("plots/modelos/diagnosticos_modelos.pdf", width = 10, height = 10)
 
 modelos <- list(
   "Modelo completo"      = modelo_completo,
@@ -164,10 +172,10 @@ modelos <- list(
   "Modelo B"             = modelo_B,
   "Modelo C"             = modelo_C,
   "Modelo D"             = modelo_D,
-  "Modelo LASSO"         = modelo_lasso_glm,
-  "Modelo LASSO 1-SE"    = modelo_lasso_1se_glm,
-  "Modelo RIDGE"         = modelo_ridge_min_glm,
-  "Modelo RIDGE 1-SE"    = modelo_ridge_1se_glm
+  "LASSO (lambda.min)"   = modelo_lasso_min,
+  "LASSO (lambda.1se)"   = modelo_lasso_1se,
+  "Ridge (lambda.min)"   = modelo_ridge_min,
+  "Ridge (lambda.1se)"   = modelo_ridge_1se
 )
 
 for (nombre in names(modelos)) {
@@ -179,10 +187,10 @@ for (nombre in names(modelos)) {
 dev.off()
 
 # =====================================================================
-# 6. PAIRS PLOT (GGPAIRS)
+# 7. PAIRS PLOT (GGPAIRS)
 # =====================================================================
 
-pdf("plots/lasso/pairs_wdbc.pdf", width = 20, height = 20)
+pdf("plots/variables/pairs_wdbc.pdf", width = 20, height = 20)
 
 g <- ggpairs(
   vars,
@@ -203,14 +211,14 @@ print(g)
 dev.off()
 
 # =====================================================================
-# 7. CPAIRS (gclus)
+# 8. CPAIRS (gclus)
 # =====================================================================
 
 corr_mat <- abs(cor(vars))
 corr_colors <- dmat.color(corr_mat)
 order_vars <- order.single(corr_mat)
 
-pdf("plots/lasso/cpairs_wdbc.pdf", width = 20, height = 20)
+pdf("plots/variables/cpairs_wdbc.pdf", width = 20, height = 20)
 
 par(cex = 0.6)
 par(cex.axis = 0.5)
@@ -227,7 +235,7 @@ cpairs(
 dev.off()
 
 # =====================================================================
-# 8. PCA (scores)
+# 9. PCA (scores)
 # =====================================================================
 
 pca <- prcomp(vars, scale.=TRUE)
@@ -235,7 +243,7 @@ pca <- prcomp(vars, scale.=TRUE)
 scores <- as.data.frame(pca$x[, 1:2])
 scores$diagnosis <- df$diagnosis
 
-pdf("plots/lasso/pca_scores.pdf", width=8, height=6)
+pdf("plots/variables/pca_scores.pdf", width=8, height=6)
 
 p <- ggplot(scores, aes(PC1, PC2, color=diagnosis)) +
   geom_point(alpha=0.6, size=2) +
@@ -248,7 +256,7 @@ print(p)
 dev.off()
 
 # =====================================================================
-# 9. HEATMAP
+# 10. HEATMAP
 # =====================================================================
 
 M <- cor(vars)
@@ -257,7 +265,7 @@ M_ord <- M[hc$order, hc$order]
 M_melt <- melt(M_ord)
 colnames(M_melt) <- c("Var1", "Var2", "Cor")
 
-pdf("plots/lasso/heatmap_wdbc.pdf", width=14, height=12)
+pdf("plots/variables/heatmap_wdbc.pdf", width=14, height=12)
 
 p <- ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
   geom_tile(color = "white", linewidth = 0.1) +
@@ -286,7 +294,7 @@ print(p)
 dev.off()
 
 # =====================================================================
-# 10. GENERAR LOG DE RESULTADOS (summary, AIC, pseudo-R2)
+# 11. GENERAR LOG DE RESULTADOS
 # =====================================================================
 
 sink("resultados-lasso.log")
@@ -317,44 +325,46 @@ for (nombre in names(modelos)) {
 
 
 cat("==========================================================\n")
-cat(" MODELO LASSO — VARIABLES SELECCIONADAS\n")
+cat(" MODELO LASSO — SELECCIÓN DE VARIABLES\n")
 cat("==========================================================\n\n")
 
-cat("λ óptimo (lambda.min): ", lambda_min, "\n")
-cat("λ 1-SE (lambda.1se): ", lambda_1se, "\n\n")
+cat("Cross-Validation:\n")
+cat("  λ óptimo (lambda.min): ", lambda_min, "\n")
+cat("  λ 1-SE (lambda.1se):   ", lambda_1se, "\n\n")
 
-cat("Variables seleccionadas por LASSO (lambda.min):\n")
-print(vars_lasso_min)
-cat("\n\n")
+cat("Variables seleccionadas (lambda.min): ", length(vars_lasso_min), " variables\n")
+cat("  ", paste(vars_lasso_min, collapse = ", "), "\n\n")
 
 cat("Coeficientes LASSO (lambda.min):\n")
-print(coef_min)
+print(coef_lasso_min)
 cat("\n\n")
 
-cat("Variables seleccionadas por LASSO (lambda.1se):\n")
-print(vars_lasso_1se)
-cat("\n\n")
+cat("Variables seleccionadas (lambda.1se): ", length(vars_lasso_1se), " variables\n")
+cat("  ", paste(vars_lasso_1se, collapse = ", "), "\n\n")
 
 cat("Coeficientes LASSO (lambda.1se):\n")
-print(coef_1se)
+print(coef_lasso_1se)
 cat("\n\n")
 
 cat("==========================================================\n")
-cat(" MODELO RIDGE — VARIABLES (lambda.min y 1-SE)\n")
+cat(" MODELO RIDGE — REGULARIZACIÓN L2\n")
 cat("==========================================================\n\n")
 
-cat("λ Ridge mínimo (lambda.min): ", ridge_lambda_min, "\n")
-cat("λ Ridge 1-SE (lambda.1se): ", ridge_lambda_1se, "\n\n")
+cat("Cross-Validation:\n")
+cat("  λ óptimo (lambda.min): ", lambda_ridge_min, "\n")
+cat("  λ 1-SE (lambda.1se):   ", lambda_ridge_1se, "\n\n")
 
-cat("Variables (ridge.lambda.min):\n")
-print(vars_ridge_min)
-cat("\nCoeficientes Ridge (lambda.min):\n")
+cat("Variables incluidas (lambda.min): ", length(vars_ridge_min), " variables\n")
+cat("  ", paste(vars_ridge_min, collapse = ", "), "\n\n")
+
+cat("Coeficientes Ridge (lambda.min):\n")
 print(coef_ridge_min)
 cat("\n\n")
 
-cat("Variables (ridge.lambda.1se):\n")
-print(vars_ridge_1se)
-cat("\nCoeficientes Ridge (lambda.1se):\n")
+cat("Variables incluidas (lambda.1se): ", length(vars_ridge_1se), " variables\n")
+cat("  ", paste(vars_ridge_1se, collapse = ", "), "\n\n")
+
+cat("Coeficientes Ridge (lambda.1se):\n")
 print(coef_ridge_1se)
 cat("\n\n")
 
@@ -373,19 +383,3 @@ for (nombre in names(modelos)) {
 }
 
 sink()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

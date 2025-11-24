@@ -1,22 +1,22 @@
 ==========================================================
  ANÁLISIS DE REGRESIÓN LOGÍSTICA — WDBC (solo variables _mean)
- Fecha de ejecución:  2025-11-23 18:28:53.655698 
+ Fecha de ejecución:  2025-11-24 17:11:24.663571 
 ==========================================================
 
 
 ==========================================================
  COMPARACIÓN DE MODELOS POR AIC
 ==========================================================
-              Model      AIC
-6      Modelo LASSO 166.1883
-1   Modelo completo 168.1304
-8      Modelo RIDGE 168.1304
-9 Modelo RIDGE 1-SE 168.1304
-7 Modelo LASSO 1-SE 169.3819
-2          Modelo A 172.3833
-3          Modelo B 209.3402
-4          Modelo C 215.2371
-5          Modelo D 215.6866
+               Model      AIC
+6 LASSO (lambda.min) 166.3452
+1    Modelo completo 168.1304
+8 Ridge (lambda.min) 168.1304
+9 Ridge (lambda.1se) 168.1304
+7 LASSO (lambda.1se) 172.3477
+2           Modelo A 172.3833
+3           Modelo B 209.3402
+4           Modelo C 215.2371
+5           Modelo D 215.6866
 
 
 ==========================================================
@@ -48,125 +48,116 @@ fitting null model for pseudo-r2
          llh      llhNull           G2     McFadden         r2ML         r2CU 
 -103.8432897 -375.7200027  543.7534260    0.7236152    0.6154302    0.8395661 
 
-Modelo LASSO :
+LASSO (lambda.min) :
 fitting null model for pseudo-r2
          llh      llhNull           G2     McFadden         r2ML         r2CU 
- -75.0941644 -375.7200027  601.2516767    0.8001326    0.6523925    0.8899898 
+ -76.1726124 -375.7200027  599.0947806    0.7972623    0.6510723    0.8881889 
 
-Modelo LASSO 1-SE :
+LASSO (lambda.1se) :
 fitting null model for pseudo-r2
          llh      llhNull           G2     McFadden         r2ML         r2CU 
- -78.6909653 -375.7200027  594.0580748    0.7905596    0.6479700    0.8839566 
+ -81.1738416 -375.7200027  589.0923222    0.7839512    0.6448843    0.8797472 
 
-Modelo RIDGE :
+Ridge (lambda.min) :
 fitting null model for pseudo-r2
          llh      llhNull           G2     McFadden         r2ML         r2CU 
  -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
 
-Modelo RIDGE 1-SE :
+Ridge (lambda.1se) :
 fitting null model for pseudo-r2
          llh      llhNull           G2     McFadden         r2ML         r2CU 
  -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
 
 ==========================================================
- MODELO LASSO — VARIABLES SELECCIONADAS
+ MODELO LASSO — SELECCIÓN DE VARIABLES
 ==========================================================
 
-λ óptimo (lambda.min):  0.003584205 
-λ 1-SE (lambda.1se):  0.01318407 
+Cross-Validation:
+  λ óptimo (lambda.min):  0.006263501 
+  λ 1-SE (lambda.1se):    0.04026224 
 
-Variables seleccionadas por LASSO (lambda.min):
-[1] "texture_mean"           "area_mean"              "smoothness_mean"       
-[4] "concavity_mean"         "concave.points_mean"    "symmetry_mean"         
-[7] "fractal_dimension_mean"
-
+Variables seleccionadas (lambda.min):  6  variables
+   texture_mean, area_mean, smoothness_mean, concavity_mean, concave.points_mean, symmetry_mean 
 
 Coeficientes LASSO (lambda.min):
 11 x 1 sparse Matrix of class "dgCMatrix"
-                         lambda.min
-(Intercept)            -19.22752886
-radius_mean              .         
-texture_mean             0.29579110
-perimeter_mean           .         
-area_mean                0.00833129
-smoothness_mean         42.82840433
-compactness_mean         .         
-concavity_mean           5.24227911
-concave.points_mean     55.85262076
-symmetry_mean           10.98243317
-fractal_dimension_mean -26.85910351
+                          lambda.min
+(Intercept)            -17.092915130
+radius_mean              .          
+texture_mean             0.260107550
+perimeter_mean           .          
+area_mean                0.007171902
+smoothness_mean         24.141006286
+compactness_mean         .          
+concavity_mean           1.248487560
+concave.points_mean     61.634301888
+symmetry_mean            8.156198638
+fractal_dimension_mean   .          
 
 
-Variables seleccionadas por LASSO (lambda.1se):
-[1] "radius_mean"         "texture_mean"        "smoothness_mean"    
-[4] "concave.points_mean" "symmetry_mean"      
-
+Variables seleccionadas (lambda.1se):  4  variables
+   radius_mean, texture_mean, perimeter_mean, concave.points_mean 
 
 Coeficientes LASSO (lambda.1se):
 11 x 1 sparse Matrix of class "dgCMatrix"
-                        lambda.1se
-(Intercept)            -14.8669056
-radius_mean              0.4380092
-texture_mean             0.2010973
-perimeter_mean           .        
-area_mean                .        
-smoothness_mean          3.4314329
-compactness_mean         .        
-concavity_mean           .        
-concave.points_mean     64.7218804
-symmetry_mean            3.7721126
-fractal_dimension_mean   .        
+                       lambda.1se
+(Intercept)            -8.4445404
+radius_mean             0.1355356
+texture_mean            0.1009126
+perimeter_mean          0.0182508
+area_mean               .        
+smoothness_mean         .        
+compactness_mean        .        
+concavity_mean          .        
+concave.points_mean    47.1186082
+symmetry_mean           .        
+fractal_dimension_mean  .        
 
 
 ==========================================================
- MODELO RIDGE — VARIABLES (lambda.min y 1-SE)
+ MODELO RIDGE — REGULARIZACIÓN L2
 ==========================================================
 
-λ Ridge mínimo (lambda.min):  0.0375487 
-λ Ridge 1-SE (lambda.1se):  0.04963717 
+Cross-Validation:
+  λ óptimo (lambda.min):  0.04522754 
+  λ 1-SE (lambda.1se):    0.3190714 
 
-Variables (ridge.lambda.min):
- [1] "radius_mean"            "texture_mean"           "perimeter_mean"        
- [4] "area_mean"              "smoothness_mean"        "compactness_mean"      
- [7] "concavity_mean"         "concave.points_mean"    "symmetry_mean"         
-[10] "fractal_dimension_mean"
+Variables incluidas (lambda.min):  10  variables
+   radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean, compactness_mean, concavity_mean, concave.points_mean, symmetry_mean, fractal_dimension_mean 
 
 Coeficientes Ridge (lambda.min):
 11 x 1 sparse Matrix of class "dgCMatrix"
                           lambda.min
-(Intercept)            -13.604451217
-radius_mean              0.175092490
-texture_mean             0.150821482
-perimeter_mean           0.025065805
-area_mean                0.001657893
-smoothness_mean         26.819934476
-compactness_mean         5.362224357
-concavity_mean           6.622874074
-concave.points_mean     18.066392046
-symmetry_mean            8.920802901
-fractal_dimension_mean -32.085162981
+(Intercept)            -12.922298883
+radius_mean              0.166685628
+texture_mean             0.139807384
+perimeter_mean           0.023912628
+area_mean                0.001572654
+smoothness_mean         24.667000060
+compactness_mean         5.412301023
+concavity_mean           6.285987619
+concave.points_mean     16.979889659
+symmetry_mean            8.466840514
+fractal_dimension_mean -29.236063902
 
 
-Variables (ridge.lambda.1se):
- [1] "radius_mean"            "texture_mean"           "perimeter_mean"        
- [4] "area_mean"              "smoothness_mean"        "compactness_mean"      
- [7] "concavity_mean"         "concave.points_mean"    "symmetry_mean"         
-[10] "fractal_dimension_mean"
+Variables incluidas (lambda.1se):  10  variables
+   radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean, compactness_mean, concavity_mean, concave.points_mean, symmetry_mean, fractal_dimension_mean 
 
 Coeficientes Ridge (lambda.1se):
 11 x 1 sparse Matrix of class "dgCMatrix"
                          lambda.1se
-(Intercept)            -12.58741088
-radius_mean              0.16249417
-texture_mean             0.13444323
-perimeter_mean           0.02333442
-area_mean                0.00153083
-smoothness_mean         23.64900894
-compactness_mean         5.41765802
-concavity_mean           6.12221513
-concave.points_mean     16.45433627
-symmetry_mean            8.24314209
-fractal_dimension_mean -27.85251077
+(Intercept)            -6.847851923
+radius_mean             0.085154876
+texture_mean            0.053340629
+perimeter_mean          0.012395728
+area_mean               0.000799694
+smoothness_mean        10.097609560
+compactness_mean        3.860492140
+concavity_mean          3.299155879
+concave.points_mean     8.095336508
+symmetry_mean           4.368600928
+fractal_dimension_mean -7.996516788
 
 
 ==========================================================
@@ -313,37 +304,36 @@ Number of Fisher Scoring iterations: 7
 
 
 ----------------------------------------------------------
-  Modelo LASSO 
+  LASSO (lambda.min) 
 ----------------------------------------------------------
 
 Call:
-glm(formula = formula_lasso, family = binomial, data = df)
+glm(formula = formula_lasso_min, family = binomial, data = df)
 
 Coefficients:
-                         Estimate Std. Error z value Pr(>|z|)    
-(Intercept)            -23.865755   5.448737  -4.380 1.19e-05 ***
-texture_mean             0.377121   0.062944   5.991 2.08e-09 ***
-area_mean                0.010960   0.002567   4.270 1.96e-05 ***
-smoothness_mean         82.880962  32.662155   2.538   0.0112 *  
-concavity_mean          14.015673   8.118219   1.726   0.0843 .  
-concave.points_mean     45.824763  25.554442   1.793   0.0729 .  
-symmetry_mean           16.626419  10.757017   1.546   0.1222    
-fractal_dimension_mean -87.491072  61.208108  -1.429   0.1529    
+                     Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -28.14507    4.66024  -6.039 1.55e-09 ***
+texture_mean          0.37912    0.06327   5.992 2.08e-09 ***
+area_mean             0.01234    0.00240   5.142 2.72e-07 ***
+smoothness_mean      67.62813   30.05124   2.250   0.0244 *  
+concavity_mean        7.11935    6.68289   1.065   0.2867    
+concave.points_mean  49.34928   25.35668   1.946   0.0516 .  
+symmetry_mean        15.50193   10.71552   1.447   0.1480    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
     Null deviance: 751.44  on 568  degrees of freedom
-Residual deviance: 150.19  on 561  degrees of freedom
-AIC: 166.19
+Residual deviance: 152.35  on 562  degrees of freedom
+AIC: 166.35
 
 Number of Fisher Scoring iterations: 8
 
 
 
 ----------------------------------------------------------
-  Modelo LASSO 1-SE 
+  LASSO (lambda.1se) 
 ----------------------------------------------------------
 
 Call:
@@ -351,27 +341,26 @@ glm(formula = formula_lasso_1se, family = binomial, data = df)
 
 Coefficients:
                      Estimate Std. Error z value Pr(>|z|)    
-(Intercept)         -31.99441    5.23942  -6.106 1.02e-09 ***
-radius_mean           0.92241    0.17478   5.278 1.31e-07 ***
-texture_mean          0.37011    0.06136   6.031 1.62e-09 ***
-smoothness_mean      44.67579   25.15032   1.776   0.0757 .  
-concave.points_mean  72.16555   16.39140   4.403 1.07e-05 ***
-symmetry_mean        17.80564   10.33132   1.723   0.0848 .  
+(Intercept)         -21.86562    2.62286  -8.337  < 2e-16 ***
+radius_mean           2.93267    1.60510   1.827   0.0677 .  
+texture_mean          0.33780    0.05627   6.003 1.94e-09 ***
+perimeter_mean       -0.35466    0.24866  -1.426   0.1538    
+concave.points_mean 119.48894   18.88814   6.326 2.51e-10 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
     Null deviance: 751.44  on 568  degrees of freedom
-Residual deviance: 157.38  on 563  degrees of freedom
-AIC: 169.38
+Residual deviance: 162.35  on 564  degrees of freedom
+AIC: 172.35
 
 Number of Fisher Scoring iterations: 8
 
 
 
 ----------------------------------------------------------
-  Modelo RIDGE 
+  Ridge (lambda.min) 
 ----------------------------------------------------------
 
 Call:
@@ -404,7 +393,7 @@ Number of Fisher Scoring iterations: 9
 
 
 ----------------------------------------------------------
-  Modelo RIDGE 1-SE 
+  Ridge (lambda.1se) 
 ----------------------------------------------------------
 
 Call:

@@ -58,7 +58,7 @@ modelo_D <- glm(
 # 4. DIAGNÓSTICOS DE LOS MODELOS
 # =====================================================================
 
-pdf("plots/diagnosticos_modelos.pdf", width = 10, height = 10)
+pdf("plots/modelos/diagnosticos_modelos.pdf", width = 10, height = 10)
 
 modelos <- list(
   "Modelo completo"      = modelo_completo,
@@ -80,7 +80,7 @@ dev.off()
 # 5. PAIRS PLOT (GGPAIRS)
 # =====================================================================
 
-pdf("plots/pairs_wdbc.pdf", width = 20, height = 20)
+pdf("plots/variables/pairs_wdbc.pdf", width = 20, height = 20)
 
 g <- ggpairs(
   vars,
@@ -108,7 +108,7 @@ corr_mat <- abs(cor(vars))
 corr_colors <- dmat.color(corr_mat)
 order_vars <- order.single(corr_mat)
 
-pdf("plots/cpairs_wdbc.pdf", width = 20, height = 20)
+pdf("plots/variables/cpairs_wdbc.pdf", width = 20, height = 20)
 
 par(cex = 0.6)
 par(cex.axis = 0.5)
@@ -133,7 +133,7 @@ pca <- prcomp(vars, scale.=TRUE)
 scores <- as.data.frame(pca$x[, 1:2])
 scores$diagnosis <- df$diagnosis
 
-pdf("plots/pca_scores.pdf", width=8, height=6)
+pdf("plots/variables/pca_scores.pdf", width=8, height=6)
 
 p <- ggplot(scores, aes(PC1, PC2, color=diagnosis)) +
   geom_point(alpha=0.6, size=2) +
@@ -155,7 +155,7 @@ M_ord <- M[hc$order, hc$order]
 M_melt <- melt(M_ord)
 colnames(M_melt) <- c("Var1", "Var2", "Cor")
 
-pdf("plots/heatmap_wdbc.pdf", width=14, height=12)
+pdf("plots/variables/heatmap_wdbc.pdf", width=14, height=12)
 
 p <- ggplot(M_melt, aes(x = Var1, y = Var2, fill = Cor)) +
   geom_tile(color = "white", linewidth = 0.1) +
