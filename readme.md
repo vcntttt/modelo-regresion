@@ -61,13 +61,13 @@ El objetivo es determinar si un subconjunto reducido de estas características p
 Del dataset completo (10 variables × 3 versiones), se seleccionaron solo las variables que terminan en _mean, puesto que: representan el valor promedio por imagen, reducen multicolinealidad con las versiones _se y _worst, permiten modelos más estables, interpretables y comparables,
 
 | Variable                   | Significado                                                                                      |
-| -- |  |
+|---|---|
 | **radius_mean**            | Promedio de la distancia desde el centro del tumor hasta su perímetro (tamaño general).          |
 | **texture_mean**           | Variación de niveles de gris en la imagen (relacionada con homogeneidad del tejido).             |
 | **perimeter_mean**         | Longitud promedio del contorno del tumor.                                                        |
 | **area_mean**              | Área promedio del tumor en la imagen.                                                            |
 | **smoothness_mean**        | Variación local del radio; mide irregularidades a pequeña escala del contorno.                   |
-| **compactness_mean**       | Relación entre perímetro y área; indica qué tan “compacto” o extendido es el tumor.              |
+| **compactness_mean**       | Relación entre perímetro y área; indica qué tan "compacto" o extendido es el tumor.              |
 | **concavity_mean**         | Grado de concavidad del contorno (depresiones o curvas hacia adentro).                           |
 | **concave.points_mean**    | Número y profundidad de puntos cóncavos en el tumor (muy discriminante entre benigno y maligno). |
 | **symmetry_mean**          | Medida de simetría global del tumor.                                                             |
