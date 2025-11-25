@@ -1,0 +1,73 @@
+==========================================================
+ LASSO — SELECCIÓN AUTOMÁTICA DE VARIABLES
+ Fecha de ejecución:  2025-11-25 20:05:16.329038 
+==========================================================
+
+LASSO (Least Absolute Shrinkage and Selection Operator)
+Regularización L1: Penaliza |β|, forzando coeficientes a 0.
+Resultado: Selección automática de variables.
+
+----------------------------------------------------------
+ CROSS-VALIDATION
+----------------------------------------------------------
+λ óptimo (lambda.min):  0.006263501 
+  → Minimiza el error de clasificación
+
+λ 1-SE (lambda.1se):    0.04026224 
+  → Modelo más parsimonioso dentro de 1 error estándar
+
+==========================================================
+ VARIABLES SELECCIONADAS — lambda.min
+==========================================================
+Total:  6  variables
+
+Variables:
+  •  texture_mean 
+  •  area_mean 
+  •  smoothness_mean 
+  •  concavity_mean 
+  •  concave.points_mean 
+  •  symmetry_mean 
+
+Coeficientes:
+11 x 1 sparse Matrix of class "dgCMatrix"
+                          lambda.min
+(Intercept)            -17.092915130
+radius_mean              .          
+texture_mean             0.260107550
+perimeter_mean           .          
+area_mean                0.007171902
+smoothness_mean         24.141006286
+compactness_mean         .          
+concavity_mean           1.248487560
+concave.points_mean     61.634301888
+symmetry_mean            8.156198638
+fractal_dimension_mean   .          
+
+
+==========================================================
+ VARIABLES SELECCIONADAS — lambda.1se (más parsimonioso)
+==========================================================
+Total:  4  variables
+
+Variables:
+  •  radius_mean 
+  •  texture_mean 
+  •  perimeter_mean 
+  •  concave.points_mean 
+
+Coeficientes:
+11 x 1 sparse Matrix of class "dgCMatrix"
+                       lambda.1se
+(Intercept)            -8.4445404
+radius_mean             0.1355356
+texture_mean            0.1009126
+perimeter_mean          0.0182508
+area_mean               .        
+smoothness_mean         .        
+compactness_mean        .        
+concavity_mean          .        
+concave.points_mean    47.1186082
+symmetry_mean           .        
+fractal_dimension_mean  .        
+

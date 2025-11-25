@@ -177,52 +177,51 @@ reconstruimos modelos glm usando las variables seleccionadas por LASSO y Ridge.
 
 ### 7.1 Comparación de AIC
 
-| Modelo | AIC |
-| --- | --- |
-| **LASSO (λ.min)** | **166.19** ← mejor |
-| Modelo completo | 168.13 |
-| Ridge / Ridge 1-SE | 168.13 |
-| **LASSO (1-SE)** | 169.38 |
-| Modelo A (manual) | 172.38 |
-| Otros modelos | Peor |
+| Modelo | AIC | Comentario |
+| --- | --- | --- |
+| **LASSO (λ.min)** | **166.35** | Mejor ajuste (λ = 0.0063) |
+| Modelo completo | 168.13 | Referencia sin penalización |
+| Ridge (λ.min / λ.1se) | 168.13 | Replica el completo con coeficientes suavizados |
+| **LASSO (1-SE)** | 172.35 | Compacto (λ = 0.0403) |
+| Modelo A (manual) | 172.38 | 3 vars, muy interpretable |
+| Modelos B–D | 209–215 | Pierden demasiada información |
 
 ### Interpretación
 
-* **LASSO λ.min** genera el mejor modelo predictivo.
-* **LASSO 1-SE** ofrece un modelo más parsimonioso (5 variables) con un AIC competitivo.
-* **Ridge** no mejora el modelo completo; lo reproduce.
-* **Modelo A** sigue siendo el referente manual más interpretable.
+* **LASSO λ.min** ofrece el mejor desempeño global.
+* **LASSO 1-SE** mantiene un AIC competitivo con menos variables.
+* **Ridge** confirma el buen ajuste del modelo completo pero no reduce dimensionalidad.
+* **Modelo A** se conserva como la opción manual más interpretable.
 
 
 ## 7.2 Selección de variables
 
-### 🔵 LASSO (λ.min): 7 variables
+### 🔵 LASSO (λ.min): 6 variables
 
-Elimina solo 3 variables redundantes.
-Logra el mejor AIC.
+`texture_mean`, `area_mean`, `smoothness_mean`, `concavity_mean`, `concave.points_mean`, `symmetry_mean`.
+Mejor AIC, mantiene variables de forma y textura, descarta radio/perímetro.
 
-### 🔵 LASSO (1-SE): 5 variables
+### 🔵 LASSO (1-SE): 4 variables
 
-Versión automática del Modelo A + 2 variables complementarias.
-Excelente equilibrio simplicidad–desempeño.
+`radius_mean`, `texture_mean`, `perimeter_mean`, `concave.points_mean`.
+Modelo compacto dentro de 1-SE del mínimo de CV.
 
 ### 🔵 Ridge: 10 variables
 
-No elimina ninguna → estabiliza coeficientes.
-Confirmó que ninguna variable es irrelevante según CV.
+Conserva todas las variables `_mean`; el aporte es estabilizar coeficientes ante colinealidad extrema.
 
 ## 7.3 Pseudo-R²
 
-* El modelo completo y Ridge alcanzan McFadden R² ≈ **0.806**
-* LASSO λ.min ≈ **0.800**
-* LASSO 1-SE ≈ **0.790**
-* Modelo A ≈ **0.781**
+* Modelo completo y Ridge: McFadden R² ≈ **0.806**.
+* LASSO λ.min: ≈ **0.797**.
+* LASSO 1-SE: ≈ **0.784**.
+* Modelo A: ≈ **0.781**.
 
 ### Interpretación:
 
-* Ridge confirma que el modelo completo está bien ajustado.
-* LASSO mejora AIC sin pérdida relevante de R².
-* El modelo A sigue siendo muy eficiente pese a su simplicidad.
+* Ridge confirma que el modelo completo está bien ajustado pero sin selección de variables.
+* LASSO mejora AIC con pérdida mínima de R².
+* El modelo A sigue siendo eficiente y explicativo pese a su simplicidad.
 
 
 
@@ -232,10 +231,10 @@ Confirmó que ninguna variable es irrelevante según CV.
 
 Sí. Ambos métodos:
 
-* solucionan la colinealidad severa,
-* estabilizan coeficientes,
-* permiten comparar parsimonia vs desempeño,
-* verifican empíricamente la estructura del dataset.
+* mitigan la colinealidad severa,
+* estabilizan coeficientes (Ridge),
+* seleccionan variables (LASSO),
+* permiten contrastar parsimonia vs. desempeño de forma automática.
 
 ## ✔ ¿Qué modelo es mejor?
 
@@ -243,11 +242,11 @@ Depende del objetivo:
 
 ### 🥇 **Mejor modelo predictivo global:**
 
-**LASSO (λ.min)** — AIC = 166.19
+**LASSO (λ.min)** — AIC ≈ 166.35
 
 ### 🎯 **Mejor modelo parsimonioso automático:**
 
-**LASSO (1-SE)** — 5 variables, AIC competitivo
+**LASSO (1-SE)** — 4 variables, AIC competitivo
 
 ### 📘 **Mejor modelo manual interpretativo:**
 
@@ -255,7 +254,7 @@ Depende del objetivo:
 
 ### ⚙️ **Modelo más estable:**
 
-**Ridge** — equivalente al modelo completo, coeficientes suaves
+**Ridge** — equivalente al modelo completo, coeficientes suavizados
 
 ## ✔ ¿Qué aprendemos?
 
@@ -269,4 +268,3 @@ Depende del objetivo:
   * LASSO λ.min
 
 representan puntos óptimos en el trade-off.
-

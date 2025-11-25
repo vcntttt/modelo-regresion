@@ -1,0 +1,54 @@
+==========================================================
+ RIDGE — REGULARIZACIÓN L2
+ Fecha de ejecución:  2025-11-25 20:05:26.658041 
+==========================================================
+
+Ridge Regression
+Regularización L2: Penaliza β², reduciendo magnitud de coeficientes.
+Resultado: Mantiene todas las variables pero con coeficientes reducidos.
+No realiza selección de variables como LASSO.
+
+----------------------------------------------------------
+ CROSS-VALIDATION
+----------------------------------------------------------
+λ óptimo (lambda.min):  0.04522754 
+  → Minimiza el error de clasificación
+
+λ 1-SE (lambda.1se):    0.3190714 
+  → Mayor penalización, coeficientes más reducidos
+
+==========================================================
+ COEFICIENTES — lambda.min
+==========================================================
+11 x 1 sparse Matrix of class "dgCMatrix"
+                          lambda.min
+(Intercept)            -12.922298883
+radius_mean              0.166685628
+texture_mean             0.139807384
+perimeter_mean           0.023912628
+area_mean                0.001572654
+smoothness_mean         24.667000060
+compactness_mean         5.412301023
+concavity_mean           6.285987619
+concave.points_mean     16.979889659
+symmetry_mean            8.466840514
+fractal_dimension_mean -29.236063902
+
+
+==========================================================
+ COEFICIENTES — lambda.1se (mayor regularización)
+==========================================================
+11 x 1 sparse Matrix of class "dgCMatrix"
+                         lambda.1se
+(Intercept)            -6.847851923
+radius_mean             0.085154876
+texture_mean            0.053340629
+perimeter_mean          0.012395728
+area_mean               0.000799694
+smoothness_mean        10.097609560
+compactness_mean        3.860492140
+concavity_mean          3.299155879
+concave.points_mean     8.095336508
+symmetry_mean           4.368600928
+fractal_dimension_mean -7.996516788
+

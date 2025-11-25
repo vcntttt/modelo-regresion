@@ -60,7 +60,6 @@ modelo_D <- glm(
 # 3. PREPARACIÓN DE DATOS PARA REGULARIZACIÓN
 # =====================================================================
 
-# Matriz de predictores y vector de respuesta binaria
 X <- as.matrix(df[, -1])
 y <- ifelse(df$diagnosis == "Maligno", 1, 0)
 
@@ -294,18 +293,22 @@ print(p)
 dev.off()
 
 # =====================================================================
-# 11. GENERAR LOG DE RESULTADOS
+# 11. GENERAR LOGS DE RESULTADOS
 # =====================================================================
 
-sink("resultados-lasso.log")
-  
-cat("==========================================================\n")
-cat(" ANÁLISIS DE REGRESIÓN LOGÍSTICA — WDBC (solo variables _mean)\n")
-cat(" Fecha de ejecución: ", as.character(Sys.time()), "\n")
-cat("==========================================================\n\n\n")
+# ---------------------------------------------------------------------
+# 11.1. COMPARACIÓN DE MODELOS (AIC y Pseudo-R²)
+# ---------------------------------------------------------------------
+
+sink("logs/01_comparacion_modelos.log")
 
 cat("==========================================================\n")
-cat(" COMPARACIÓN DE MODELOS POR AIC\n")
+cat(" COMPARACIÓN DE MODELOS — WDBC\n")
+cat(" Fecha de ejecución: ", as.character(Sys.time()), "\n")
+cat("==========================================================\n\n")
+
+cat("==========================================================\n")
+cat(" COMPARACIÓN POR AIC (menor es mejor)\n")
 cat("==========================================================\n")
 aics <- sapply(modelos, AIC)
 aic_table <- data.frame(Model = names(aics), AIC = as.numeric(aics), row.names = NULL)
@@ -318,68 +321,123 @@ cat(" PSEUDO-R² (McFadden, Cox–Snell, Nagelkerke)\n")
 cat("==========================================================\n\n")
 
 for (nombre in names(modelos)) {
-  cat(nombre, ":\n")
+  cat("----------------------------------------------------------\n")
+  cat(" ", nombre, "\n")
+  cat("----------------------------------------------------------\n")
   print(pR2(modelos[[nombre]]))
   cat("\n")
 }
 
+sink()
+
+# ---------------------------------------------------------------------
+# 11.2. DETALLES DE LASSO
+# ---------------------------------------------------------------------
+
+sink("logs/02_lasso.log")
 
 cat("==========================================================\n")
-cat(" MODELO LASSO — SELECCIÓN DE VARIABLES\n")
+cat(" LASSO — SELECCIÓN AUTOMÁTICA DE VARIABLES\n")
+cat(" Fecha de ejecución: ", as.character(Sys.time()), "\n")
 cat("==========================================================\n\n")
 
-cat("Cross-Validation:\n")
-cat("  λ óptimo (lambda.min): ", lambda_min, "\n")
-cat("  λ 1-SE (lambda.1se):   ", lambda_1se, "\n\n")
+cat("LASSO (Least Absolute Shrinkage and Selection Operator)\n")
+cat("Regularización L1: Penaliza |β|, forzando coeficientes a 0.\n")
+cat("Resultado: Selección automática de variables.\n\n")
 
-cat("Variables seleccionadas (lambda.min): ", length(vars_lasso_min), " variables\n")
-cat("  ", paste(vars_lasso_min, collapse = ", "), "\n\n")
+cat("----------------------------------------------------------\n")
+cat(" CROSS-VALIDATION\n")
+cat("----------------------------------------------------------\n")
+cat("λ óptimo (lambda.min): ", lambda_min, "\n")
+cat("  → Minimiza el error de clasificación\n\n")
+cat("λ 1-SE (lambda.1se):   ", lambda_1se, "\n")
+cat("  → Modelo más parsimonioso dentro de 1 error estándar\n\n")
 
-cat("Coeficientes LASSO (lambda.min):\n")
+cat("==========================================================\n")
+cat(" VARIABLES SELECCIONADAS — lambda.min\n")
+cat("==========================================================\n")
+cat("Total: ", length(vars_lasso_min), " variables\n\n")
+cat("Variables:\n")
+for (v in vars_lasso_min) {
+  cat("  • ", v, "\n")
+}
+cat("\n")
+
+cat("Coeficientes:\n")
 print(coef_lasso_min)
 cat("\n\n")
 
-cat("Variables seleccionadas (lambda.1se): ", length(vars_lasso_1se), " variables\n")
-cat("  ", paste(vars_lasso_1se, collapse = ", "), "\n\n")
+cat("==========================================================\n")
+cat(" VARIABLES SELECCIONADAS — lambda.1se (más parsimonioso)\n")
+cat("==========================================================\n")
+cat("Total: ", length(vars_lasso_1se), " variables\n\n")
+cat("Variables:\n")
+for (v in vars_lasso_1se) {
+  cat("  • ", v, "\n")
+}
+cat("\n")
 
-cat("Coeficientes LASSO (lambda.1se):\n")
+cat("Coeficientes:\n")
 print(coef_lasso_1se)
-cat("\n\n")
+cat("\n")
+
+sink()
+
+# ---------------------------------------------------------------------
+# 11.3. DETALLES DE RIDGE
+# ---------------------------------------------------------------------
+
+sink("logs/03_ridge.log")
 
 cat("==========================================================\n")
-cat(" MODELO RIDGE — REGULARIZACIÓN L2\n")
+cat(" RIDGE — REGULARIZACIÓN L2\n")
+cat(" Fecha de ejecución: ", as.character(Sys.time()), "\n")
 cat("==========================================================\n\n")
 
-cat("Cross-Validation:\n")
-cat("  λ óptimo (lambda.min): ", lambda_ridge_min, "\n")
-cat("  λ 1-SE (lambda.1se):   ", lambda_ridge_1se, "\n\n")
+cat("Ridge Regression\n")
+cat("Regularización L2: Penaliza β², reduciendo magnitud de coeficientes.\n")
+cat("Resultado: Mantiene todas las variables pero con coeficientes reducidos.\n")
+cat("No realiza selección de variables como LASSO.\n\n")
 
-cat("Variables incluidas (lambda.min): ", length(vars_ridge_min), " variables\n")
-cat("  ", paste(vars_ridge_min, collapse = ", "), "\n\n")
+cat("----------------------------------------------------------\n")
+cat(" CROSS-VALIDATION\n")
+cat("----------------------------------------------------------\n")
+cat("λ óptimo (lambda.min): ", lambda_ridge_min, "\n")
+cat("  → Minimiza el error de clasificación\n\n")
+cat("λ 1-SE (lambda.1se):   ", lambda_ridge_1se, "\n")
+cat("  → Mayor penalización, coeficientes más reducidos\n\n")
 
-cat("Coeficientes Ridge (lambda.min):\n")
+cat("==========================================================\n")
+cat(" COEFICIENTES — lambda.min\n")
+cat("==========================================================\n")
 print(coef_ridge_min)
 cat("\n\n")
 
-cat("Variables incluidas (lambda.1se): ", length(vars_ridge_1se), " variables\n")
-cat("  ", paste(vars_ridge_1se, collapse = ", "), "\n\n")
-
-cat("Coeficientes Ridge (lambda.1se):\n")
+cat("==========================================================\n")
+cat(" COEFICIENTES — lambda.1se (mayor regularización)\n")
+cat("==========================================================\n")
 print(coef_ridge_1se)
-cat("\n\n")
+cat("\n")
 
+sink()
 
+# ---------------------------------------------------------------------
+# 11.4. SUMMARIES COMPLETOS
+# ---------------------------------------------------------------------
+
+sink("logs/04_summaries.log")
 
 cat("==========================================================\n")
-cat(" SUMMARYS DE LOS MODELOS\n")
-cat("==========================================================\n\n")
+cat(" SUMMARIES COMPLETOS DE TODOS LOS MODELOS\n")
+cat(" Fecha de ejecución: ", as.character(Sys.time()), "\n")
+cat("==========================================================\n\n\n")
 
 for (nombre in names(modelos)) {
-  cat("----------------------------------------------------------\n")
+  cat("==========================================================\n")
   cat(" ", nombre, "\n")
-  cat("----------------------------------------------------------\n")
+  cat("==========================================================\n")
   print(summary(modelos[[nombre]]))
-  cat("\n\n")
+  cat("\n\n\n")
 }
 
 sink()

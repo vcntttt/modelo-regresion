@@ -258,22 +258,34 @@ Los cuatro modelos serán evaluados mediante AIC, pseudo-R², diagnósticos de r
 
 Resultados en `resultados.log`.
 
-### Conclusión
+## ⚙️ Regularización L1/L2 (LASSO y Ridge)
 
-- El mejor modelo reducido es el Modelo A.
-- B falla porque omite tamaño.
-- C falla porque omite textura.
-- D no mejora porque incluye dos variables que aportan la misma informacion (`symmetry` y `concave.points`).
+Para manejar la multicolinealidad de las 10 variables `_mean` se ajustaron modelos penalizados con `glmnet` (ver `lasso.r`) usando 10-fold CV:
 
-El modelo completo no es necesario, incluye muchas variables redundantes y no aporta mejoras significativas a los indicadores (AIC / R2)
+- `alpha = 1` → **LASSO** (selección automática de variables).
+- `alpha = 0` → **Ridge** (coeficientes estables sin descartar predictores).
+- Se reportan dos λ: `lambda.min` (mejor error de CV) y `lambda.1se` (versión más simple dentro de 1 desviación estándar).
+
+### Hallazgos clave (ver `resultados-lasso.log`)
+- **LASSO λ.min (λ = 0.0063)**: mejor AIC = **166.35** con 6 variables (`texture_mean`, `area_mean`, `smoothness_mean`, `concavity_mean`, `concave.points_mean`, `symmetry_mean`); McFadden R² ≈ 0.80.
+- **LASSO λ.1se (λ = 0.0403)**: modelo compacto de **4 variables** (`radius_mean`, `texture_mean`, `perimeter_mean`, `concave.points_mean`); AIC = **172.35**, McFadden R² ≈ 0.784.
+- **Ridge (λ.min y λ.1se)**: conserva las 10 variables y reproduce el modelo completo (AIC = **168.13**, McFadden R² ≈ 0.806); aporta estabilidad pero no reduce dimensionalidad.
+- **Modelo A manual** sigue siendo el referente interpretativo (3 variables, AIC = **172.38**), aunque el mejor ajuste global lo logra LASSO λ.min.
+
+### Comparativa rápida (AIC)
+
+| Modelo | Vars | AIC | Nota |
+|---|---:|---:|---|
+| LASSO (λ.min) | 6 | 166.35 | Mejor ajuste CV |
+| Modelo completo / Ridge | 10 | 168.13 | Ridge estabiliza, no reduce |
+| LASSO (λ.1se) | 4 | 172.35 | Compacto y competitivo |
+| Modelo A | 3 | 172.38 | Manual e interpretable |
+| Modelos B–D | 2–3 | 209–215 | Pierden mucha información |
 
 ## Conclusión final
-> Sí, es totalmente posible predecir el diagnóstico (benigno/maligno) usando solo un subconjunto reducido de variables.
+> Sí, es posible predecir el diagnóstico (benigno/maligno) con muy pocas variables, y la regularización mejora el equilibrio entre ajuste y parsimonia.
 
-El Modelo A, con solo tres variables bien elegidas, logra un desempeño prácticamente indistinguible del modelo completo:
-
-- AIC ~ 172 vs. 168
-- McFadden R² ~ 0.78 vs. 0.81
-- Todos sus coeficientes son altamente significativos
-- No presenta colinealidad severa
-- Es interpretable clínicamente
+- **Mejor desempeño predictivo:** LASSO λ.min (AIC 166.35, R² ≈ 0.80).
+- **Mejor modelo compacto automático:** LASSO λ.1se (4 vars, AIC 172.35).
+- **Mejor modelo manual explicativo:** Modelo A (3 vars, AIC 172.38).
+- **Ridge** confirma que el modelo completo es estable, pero no aporta reducción de variables.
