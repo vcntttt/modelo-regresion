@@ -102,9 +102,9 @@ modelo_lasso_1se <- glm(formula_lasso_1se, data = df, family = binomial)
 
 # curva de CV de LASSO
 pdf("plots/modelos/lasso_cv_curve.pdf", width = 8, height = 6)
-plot(cv_lasso, main = "LASSO: Cross-Validation Curve")
-abline(v = log(lambda_min), col = "red", lty = 2)
-abline(v = log(lambda_1se), col = "blue", lty = 2)
+plot(cv_lasso)
+abline(v = -log(lambda_min), col = "red", lty = 2)
+abline(v = -log(lambda_1se), col = "blue", lty = 2)
 legend("topright", 
        legend = c("lambda.min", "lambda.1se"),
        col = c("red", "blue"), lty = 2, cex = 0.8)
@@ -149,9 +149,9 @@ modelo_ridge_1se <- glm(formula_ridge_1se, data = df, family = binomial)
 
 # curva de CV de RIDGE
 pdf("plots/modelos/ridge_cv_curve.pdf", width = 8, height = 6)
-plot(cv_ridge, main = "Ridge: Cross-Validation Curve")
-abline(v = log(lambda_ridge_min), col = "red", lty = 2)
-abline(v = log(lambda_ridge_1se), col = "blue", lty = 2)
+plot(cv_ridge)
+abline(v = -log(lambda_ridge_min), col = "red", lty = 2)
+abline(v = -log(lambda_ridge_1se), col = "blue", lty = 2)
 legend("topright", 
        legend = c("lambda.min", "lambda.1se"),
        col = c("red", "blue"), lty = 2, cex = 0.8)
@@ -300,7 +300,7 @@ dev.off()
 # 11.1. COMPARACIÓN DE MODELOS (AIC y Pseudo-R²)
 # ---------------------------------------------------------------------
 
-sink("logs/01_comparacion_modelos.log")
+sink("logs/01_aic-r2.log")
 
 cat("==========================================================\n")
 cat(" COMPARACIÓN DE MODELOS — WDBC\n")
