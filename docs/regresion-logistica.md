@@ -22,6 +22,8 @@ $$
 Y \sim \text{Bernoulli}(p)
 $$
 
+*“Y se distribuye como una Bernoulli con parámetro p”*
+
 donde
 $p = P(Y=1\mid X)$ es la **probabilidad de “éxito”** dependiendo de las variables X.
 

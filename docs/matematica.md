@@ -3,9 +3,8 @@
 Tu variable objetivo es:
 
 $$
-Y =
-\begin{cases}
-1 & \text{Maligno} \
+Y = \begin{cases}
+1 & \text{Maligno} \\
 0 & \text{Benigno}
 \end{cases}
 $$
@@ -46,8 +45,8 @@ donde (\bar{p}) es una media ponderada de todas las probabilidades individuales.
 
 ## ⚠️ **IMPORTANTE DIFERENCIA (y por qué logística funciona)**
 
-* En una binomial clásica todos los p_i son iguales → *p es constante*.
-* En regresión logística **cada p_i DEPENDE de X_i**, porque:
+* En una binomial clásica todos los $p_i$ son iguales → *p es constante*.
+* En regresión logística **cada $p_i$ DEPENDE de $X_i$**, porque:
 
 $$
 p_i = \frac{1}{1 + e^{-(\beta_0 + \beta_1x_{i1} + \dots + \beta_k x_{ik})}}

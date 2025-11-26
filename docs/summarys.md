@@ -58,30 +58,105 @@ Cada columna significa:
 | **Estimate**      | Coeficiente estimado β (efecto sobre el logit).     |
 | **Std. Error**    | Error estándar del coeficiente.                     |
 | **z value**       | Estadístico z = β / SE.                             |
-| **Pr(>|z|)**      | p-value del test H₀: β = 0.                          |
+| **Pr(>\|z\|)**      | p-value del test H₀: β = 0.                          |
 | **Signif. codes** | Asteriscos indicando nivel de significancia.        |
-### Interpretación conceptual
 
-* **Coeficiente positivo** → aumenta la probabilidad del evento (`diagnosis = 1`).
-* **Coeficiente negativo** → disminuye esa probabilidad.
-* **Asteriscos** → indican qué tan fuerte es la evidencia estadística:
 
-  * `***` p < 0.001 (muy fuerte)
-  * `**` p < 0.01
-  * `*` p < 0.05
-  * `.` p < 0.1 (marginal)
-  * sin símbolo → no significativo
+### **Estimate ($\beta$)**  
+Es el efecto del predictor sobre el **logit**:
 
-### Ejemplo
+$$
+\log\left(\frac{p}{1-p}\right) = X\beta
+$$
 
-```r
-texture_mean   0.38473   0.06454   5.961   2.5e-09 ***
-```
+- $\beta > 0$ → aumenta la probabilidad del evento (diagnosis = maligno).  
+- $\beta < 0$ → la disminuye.
+
+Para interpretar en términos de *odds*, usamos:
+
+$$
+OR = e^{\beta}
+$$
+
+Ejemplo:  
+`texture_mean = 0.38473`
+
+$$
+OR = e^{0.38473} = 1.47
+$$
+
+→ aumenta los *odds* en 47%.
+
+
+
+### **Std. Error**
+
+Mide la **incertidumbre** del coeficiente.
+
+- SE pequeño → $\beta$ es confiable.  
+- SE grande → hay ruido o inestabilidad numérica.
+
+En este modelo, algunas variables tienen SE enormes (p. ej. fractal\_dimension\_mean), lo que indica:
+
+- falta de escalamiento  
+- multicolinealidad  
+- predictores redundantes  
+
+
+
+### **z value**
+
+Es:
+
+$$
+z = \frac{\beta}{SE}
+$$
+
+Indica cuántas desviaciones estándar está el coeficiente lejos de 0.
+
+- $|z|$ grande → fuerte evidencia contra $H_0$.  
+- $|z|$ pequeño → la variable podría no importar.
+
+Ejemplo:
+
+`texture_mean`:
+
+$$
+z = \frac{0.38473}{0.06454} = 5.961
+$$
+
+→ muy significativo.
+
+
+
+### **Pr(>|z|) = p-value**
+
+Es la probabilidad de obtener un valor $z$ tan extremo **asumiendo que $H_0$ es verdadera**.
+
+$$
+H_0: \beta = 0
+$$
 
 Interpretación:
 
-* Un aumento en `texture_mean` incrementa la probabilidad del evento.
-* p-value extremadamente bajo → **muy significativo**.
+- p < 0.05 → el predictor aporta al modelo.  
+- p ≥ 0.05 → no hay evidencia de efecto.
+
+**Nota importante:**  
+el p-value NO dice “la probabilidad de que H₀ sea verdadera”.  
+Dice cuán extremo sería el estimate **si realmente $\beta = 0$**.
+
+
+
+### **Signif. codes**
+
+Son atajos visuales:
+
+- `***` p < 0.001 → muy fuerte evidencia  
+- `**` p < 0.01  
+- `*` p < 0.05  
+- `.` p < 0.1  
+- vacío → no significativo
 
 
 ## 3. Variables significativas vs. no significativas
@@ -104,9 +179,26 @@ Interpretación:
 
 Esto puede ocurrir por:
 
-* multicolinealidad (variables muy correlacionadas entre sí),
-* falta de aporte independiente,
-* redundancia en los predictores.
+- Multicolinealidad (predictoras muy correlacionadas entre sí).  
+- Redundancia en variables.  
+- Efectos pequeños comparados con el ruido.  
+- Falta de escala homogénea.  
+- Estos predictores probablemente serían eliminados por **Lasso**.
+
+### Problemas de escala numérica detectados
+
+Coeficientes gigantes como 76.43 o -68.33 indican que el modelo usado con datos **sin estandarizar** es numéricamente inestable.
+
+Esto afecta:
+
+- estimates  
+- std.errors  
+- interpretabilidad  
+- p-values  
+- odds ratios
+
+La recomendación profesional es **estandarizar todas las variables antes de usar una regresión logística multivariada**.
+
 
 
 ## 4. Parámetro de dispersión
