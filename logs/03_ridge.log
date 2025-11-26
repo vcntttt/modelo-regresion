@@ -1,11 +1,11 @@
 ==========================================================
  RIDGE — REGULARIZACIÓN L2
- Fecha de ejecución:  2025-11-25 22:32:49.617287 
+ Fecha de ejecución:  2025-11-26 11:42:13.608665 
 ==========================================================
 
 Ridge Regression
-Regularización L2: Penaliza β², reduciendo magnitud de coeficientes.
-Resultado: Mantiene todas las variables pero con coeficientes reducidos.
+Regularización L2: Penaliza β², reduciendo la magnitud de los coeficientes.
+Resultado: Mantiene todas las variables, pero con coeficientes encogidos.
 No realiza selección de variables como LASSO.
 
 ----------------------------------------------------------
@@ -18,7 +18,7 @@ No realiza selección de variables como LASSO.
   → Mayor penalización, coeficientes más reducidos
 
 ==========================================================
- COEFICIENTES — lambda.min
+ COEFICIENTES PENALIZADOS — lambda.min
 ==========================================================
 11 x 1 sparse Matrix of class "dgCMatrix"
                           lambda.min
@@ -36,7 +36,7 @@ fractal_dimension_mean -29.236063902
 
 
 ==========================================================
- COEFICIENTES — lambda.1se (mayor regularización)
+ COEFICIENTES PENALIZADOS — lambda.1se (mayor regularización)
 ==========================================================
 11 x 1 sparse Matrix of class "dgCMatrix"
                          lambda.1se

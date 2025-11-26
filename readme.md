@@ -281,6 +281,18 @@ Para manejar la multicolinealidad de las 10 variables `_mean` se ajustaron model
 | Modelo A | 3 | 172.38 | Manual e interpretable |
 | Modelos B–D | 2–3 | 209–215 | Pierden mucha información |
 
+### Desempeño en accuracy (datos de entrenamiento)
+
+Además del AIC y los pseudo‑R², se calculó la **accuracy** de todos los modelos sobre los mismos datos de entrenamiento (ver `logs/05_accuracy_modelos.log`). Los valores son muy altos en general (> 0.91) y el orden es coherente con el AIC:
+
+- `GLM` completo: ≈ **0.949**
+- Post‑LASSO (λ.min): ≈ **0.946**
+- LASSO penalizado (λ.min): ≈ **0.944**
+- Modelo A y post‑LASSO (λ.1se): ≈ **0.942**
+- Ridge penalizado (λ.min): ≈ **0.940**
+
+Modelos más agresivamente simplificados (B, C, D y Ridge λ.1se) descienden hasta el rango **0.92–0.93**, lo que refuerza la idea de que cierta complejidad mínima es necesaria para mantener un desempeño óptimo.
+
 ## Conclusión final
 > Sí, es posible predecir el diagnóstico (benigno/maligno) con muy pocas variables, y la regularización mejora el equilibrio entre ajuste y parsimonia.
 

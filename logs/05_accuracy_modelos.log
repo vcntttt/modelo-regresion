@@ -1,0 +1,18 @@
+==========================================================
+ ACCURACY DE MODELOS (ENTRENAMIENTO)
+ Fecha de ejecución:  2025-11-26 11:42:13.622909 
+==========================================================
+
+                          Modelo  Accuracy
+1                   GLM completo 0.9490334
+2        Post-LASSO (lambda.min) 0.9455185
+3  LASSO penalizado (lambda.min) 0.9437610
+4                          GLM A 0.9420035
+5        Post-LASSO (lambda.1se) 0.9420035
+6  Ridge penalizado (lambda.min) 0.9402460
+7  LASSO penalizado (lambda.1se) 0.9367311
+8                          GLM B 0.9349736
+9  Ridge penalizado (lambda.1se) 0.9261863
+10                         GLM C 0.9173989
+11                         GLM D 0.9173989
+

@@ -1,6 +1,6 @@
 ==========================================================
  COMPARACIÓN DE MODELOS — WDBC
- Fecha de ejecución:  2025-11-25 22:32:49.571768 
+ Fecha de ejecución:  2025-11-26 11:42:13.587469 
 ==========================================================
 
 ==========================================================
@@ -9,8 +9,6 @@
                Model      AIC
 6 LASSO (lambda.min) 166.3452
 1    Modelo completo 168.1304
-8 Ridge (lambda.min) 168.1304
-9 Ridge (lambda.1se) 168.1304
 7 LASSO (lambda.1se) 172.3477
 2           Modelo A 172.3833
 3           Modelo B 209.3402
@@ -70,18 +68,4 @@ fitting null model for pseudo-r2
 fitting null model for pseudo-r2
          llh      llhNull           G2     McFadden         r2ML         r2CU 
  -81.1738416 -375.7200027  589.0923222    0.7839512    0.6448843    0.8797472 
-
-----------------------------------------------------------
-  Ridge (lambda.min) 
-----------------------------------------------------------
-fitting null model for pseudo-r2
-         llh      llhNull           G2     McFadden         r2ML         r2CU 
- -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
-
-----------------------------------------------------------
-  Ridge (lambda.1se) 
-----------------------------------------------------------
-fitting null model for pseudo-r2
-         llh      llhNull           G2     McFadden         r2ML         r2CU 
- -73.0652092 -375.7200027  605.3095870    0.8055328    0.6548627    0.8933597 
 

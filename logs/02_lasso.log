@@ -1,10 +1,10 @@
 ==========================================================
  LASSO — SELECCIÓN AUTOMÁTICA DE VARIABLES
- Fecha de ejecución:  2025-11-25 22:32:49.606366 
+ Fecha de ejecución:  2025-11-26 11:42:13.602464 
 ==========================================================
 
 LASSO (Least Absolute Shrinkage and Selection Operator)
-Regularización L1: Penaliza |β|, forzando coeficientes a 0.
+Regularización L1: Penaliza |β|, forzando algunos coeficientes a 0.
 Resultado: Selección automática de variables.
 
 ----------------------------------------------------------
@@ -17,7 +17,7 @@ Resultado: Selección automática de variables.
   → Modelo más parsimonioso dentro de 1 error estándar
 
 ==========================================================
- VARIABLES SELECCIONADAS — lambda.min
+ VARIABLES SELECCIONADAS — lambda.min (post-LASSO)
 ==========================================================
 Total:  6  variables
 
@@ -29,7 +29,7 @@ Variables:
   •  concave.points_mean 
   •  symmetry_mean 
 
-Coeficientes:
+Coeficientes penalizados (glmnet):
 11 x 1 sparse Matrix of class "dgCMatrix"
                           lambda.min
 (Intercept)            -17.092915130
@@ -46,7 +46,7 @@ fractal_dimension_mean   .
 
 
 ==========================================================
- VARIABLES SELECCIONADAS — lambda.1se (más parsimonioso)
+ VARIABLES SELECCIONADAS — lambda.1se (post-LASSO, más parsimonioso)
 ==========================================================
 Total:  4  variables
 
@@ -56,7 +56,7 @@ Variables:
   •  perimeter_mean 
   •  concave.points_mean 
 
-Coeficientes:
+Coeficientes penalizados (glmnet):
 11 x 1 sparse Matrix of class "dgCMatrix"
                        lambda.1se
 (Intercept)            -8.4445404

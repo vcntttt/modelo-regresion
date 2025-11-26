@@ -223,6 +223,19 @@ Conserva todas las variables `_mean`; el aporte es estabilizar coeficientes ante
 * LASSO mejora AIC con pérdida mínima de R².
 * El modelo A sigue siendo eficiente y explicativo pese a su simplicidad.
 
+## 7.4 Accuracy en datos de entrenamiento
+
+Como complemento al AIC y a los pseudo‑R², se evaluó la **accuracy** (proporción de clasificaciones correctas) de todos los modelos sobre los mismos datos usados para el ajuste. Los resultados principales fueron:
+
+- GLM completo: ≈ **0.949**
+- Post‑LASSO (λ.min): ≈ **0.946**
+- LASSO penalizado (λ.min): ≈ **0.944**
+- Modelo A y post‑LASSO (λ.1se): ≈ **0.942**
+- Ridge penalizado (λ.min): ≈ **0.940**
+
+Modelos más simplificados (B, C, D y Ridge λ.1se) caen al rango **0.92–0.93**, lo que indica una ligera pérdida de desempeño al reducir demasiado la complejidad.  
+Estos valores se obtuvieron con el script `lasso.r` y quedan registrados en `logs/05_accuracy_modelos.log`; al estar calculados en el conjunto de entrenamiento deben interpretarse como un límite superior del desempeño esperable en datos nuevos.
+
 
 
 # 8. Conclusiones finales

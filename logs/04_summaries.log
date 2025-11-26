@@ -1,6 +1,6 @@
 ==========================================================
- SUMMARIES COMPLETOS DE TODOS LOS MODELOS
- Fecha de ejecución:  2025-11-25 22:32:49.622463 
+ SUMMARIES COMPLETOS DE TODOS LOS MODELOS GLM
+ Fecha de ejecución:  2025-11-26 11:42:13.611251 
 ==========================================================
 
 
@@ -202,74 +202,6 @@ Residual deviance: 162.35  on 564  degrees of freedom
 AIC: 172.35
 
 Number of Fisher Scoring iterations: 8
-
-
-
-
-==========================================================
-  Ridge (lambda.min) 
-==========================================================
-
-Call:
-glm(formula = formula_ridge_min, family = binomial, data = df)
-
-Coefficients:
-                        Estimate Std. Error z value Pr(>|z|)    
-(Intercept)             -7.35952   12.85259  -0.573   0.5669    
-radius_mean             -2.04930    3.71588  -0.551   0.5813    
-texture_mean             0.38473    0.06454   5.961  2.5e-09 ***
-perimeter_mean          -0.07151    0.50516  -0.142   0.8874    
-area_mean                0.03980    0.01674   2.377   0.0174 *  
-smoothness_mean         76.43227   31.95492   2.392   0.0168 *  
-compactness_mean        -1.46242   20.34249  -0.072   0.9427    
-concavity_mean           8.46870    8.12003   1.043   0.2970    
-concave.points_mean     66.82176   28.52910   2.342   0.0192 *  
-symmetry_mean           16.27824   10.63059   1.531   0.1257    
-fractal_dimension_mean -68.33703   85.55666  -0.799   0.4244    
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 751.44  on 568  degrees of freedom
-Residual deviance: 146.13  on 558  degrees of freedom
-AIC: 168.13
-
-Number of Fisher Scoring iterations: 9
-
-
-
-
-==========================================================
-  Ridge (lambda.1se) 
-==========================================================
-
-Call:
-glm(formula = formula_ridge_1se, family = binomial, data = df)
-
-Coefficients:
-                        Estimate Std. Error z value Pr(>|z|)    
-(Intercept)             -7.35952   12.85259  -0.573   0.5669    
-radius_mean             -2.04930    3.71588  -0.551   0.5813    
-texture_mean             0.38473    0.06454   5.961  2.5e-09 ***
-perimeter_mean          -0.07151    0.50516  -0.142   0.8874    
-area_mean                0.03980    0.01674   2.377   0.0174 *  
-smoothness_mean         76.43227   31.95492   2.392   0.0168 *  
-compactness_mean        -1.46242   20.34249  -0.072   0.9427    
-concavity_mean           8.46870    8.12003   1.043   0.2970    
-concave.points_mean     66.82176   28.52910   2.342   0.0192 *  
-symmetry_mean           16.27824   10.63059   1.531   0.1257    
-fractal_dimension_mean -68.33703   85.55666  -0.799   0.4244    
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 751.44  on 568  degrees of freedom
-Residual deviance: 146.13  on 558  degrees of freedom
-AIC: 168.13
-
-Number of Fisher Scoring iterations: 9
 
 
 

@@ -37,13 +37,21 @@ Interpretación:
 - Esto indica **excelente ajuste**, comparable a un modelo muy informativo.  
 - Nagelkerke ≈ 0.89 sugiere que el modelo capta casi toda la estructura separatoria del problema.
 
-### ✔ Modelos reducidos (A, B, C, D)
-- McFadden: 0.72–0.78  
-- Nagelkerke: 0.84–0.88  
+### ✔ Modelos reducidos (A, B, C, D) y LASSO
+
+Según la salida actual (`logs/01_aic-r2.log`), los pseudo‑R² quedan así (valores aproximados):
+
+- **Modelo A:** McFadden ≈ 0.781, Nagelkerke ≈ 0.878  
+- **Modelo B:** McFadden ≈ 0.729, Nagelkerke ≈ 0.844  
+- **Modelo C:** McFadden ≈ 0.722, Nagelkerke ≈ 0.838  
+- **Modelo D:** McFadden ≈ 0.724, Nagelkerke ≈ 0.840  
+- **LASSO (λ.min):** McFadden ≈ 0.797, Nagelkerke ≈ 0.888  
+- **LASSO (λ.1se):** McFadden ≈ 0.784, Nagelkerke ≈ 0.880  
 
 Interpretación:
-- Todos los modelos tienen **buen ajuste**, pero **ninguno supera al modelo completo**.
-- La caída del pseudo-R² en modelos B, C y D muestra una pérdida clara de poder explicativo.
+- Todos los modelos tienen **buen ajuste**, pero el **modelo completo** sigue siendo el referente en pseudo‑R².
+- LASSO (en especial λ.min) alcanza valores muy cercanos al modelo completo, con ligera pérdida de ajuste.
+- Modelos B, C y D muestran una caída más marcada del pseudo‑R², reflejando pérdida de poder explicativo.
 
 ### Conclusión sobre ajuste:
 
@@ -54,22 +62,26 @@ Interpretación:
 
 El **AIC** penaliza complejidad: busca modelos **parcimoniosos**.
 
-| Modelo | df | AIC |
-|--------|----|------|
-| **Completo** | 11 | **168.13** |
-| Modelo A | 4 | 172.38 |
-| Modelo B | 3 | 209.34 |
-| Modelo C | 3 | 215.24 |
-| Modelo D | 4 | 215.69 |
+Con los resultados actuales, la comparación de AIC (menor es mejor) es:
+
+| Modelo | AIC |
+|--------|------|
+| **LASSO (λ.min)** | **166.35** |
+| **Completo** | 168.13 |
+| LASSO (λ.1se) | 172.35 |
+| Modelo A | 172.38 |
+| Modelo B | 209.34 |
+| Modelo C | 215.24 |
+| Modelo D | 215.69 |
 
 Interpretación:
-- **El menor AIC es el del modelo completo (168.13)**.  
+- **El menor AIC es el de LASSO (λ.min)**, que mejora ligeramente al modelo completo usando 6 variables.  
+- LASSO (λ.1se) y el Modelo A tienen AIC muy parecidos y bastante competitivos respecto al completo.  
 - Los modelos simples (B, C, D) pierden demasiada verosimilitud para justificar su reducción.  
-- El Modelo A (3 variables) es competitivo, con un AIC solo ligeramente mayor.
 
 Conclusión sobre AIC:
 
-> **Para lograr el mejor balance entre ajuste y simplicidad, el Modelo A es una alternativa sólida si se prioriza la parsimonia.**
+> **Para lograr el mejor balance entre ajuste y simplicidad, LASSO (λ.1se) y el Modelo A son alternativas sólidas si se prioriza la parsimonia, mientras que LASSO (λ.min) ofrece el mejor ajuste global.**
 
 # 4. Relación entre pseudo-R² y AIC
 
