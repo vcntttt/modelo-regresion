@@ -256,17 +256,16 @@ Este modelo explora el uso de `symmetry_mean` en lugar de `texture_mean` como va
 
 Los cuatro modelos serán evaluados mediante AIC, pseudo-R², diagnósticos de residuos y matrices de confusión para determinar cuál ofrece el mejor desempeño práctico.
 
-Resultados en `resultados.log`.
 
 ## ⚙️ Regularización L1/L2 (LASSO y Ridge)
 
-Para manejar la multicolinealidad de las 10 variables `_mean` se ajustaron modelos penalizados con `glmnet` (ver `lasso.r`) usando 10-fold CV:
+Para manejar la multicolinealidad de las 10 variables `_mean` se ajustaron modelos penalizados con `glmnet` usando 10-fold CV:
 
 - `alpha = 1` → **LASSO** (selección automática de variables).
 - `alpha = 0` → **Ridge** (coeficientes estables sin descartar predictores).
 - Se reportan dos λ: `lambda.min` (mejor error de CV) y `lambda.1se` (versión más simple dentro de 1 desviación estándar).
 
-### Hallazgos clave (ver `resultados-lasso.log`)
+### Hallazgos clave
 - **LASSO λ.min (λ = 0.0063)**: mejor AIC = **166.35** con 6 variables (`texture_mean`, `area_mean`, `smoothness_mean`, `concavity_mean`, `concave.points_mean`, `symmetry_mean`); McFadden R² ≈ 0.80.
 - **LASSO λ.1se (λ = 0.0403)**: modelo compacto de **4 variables** (`radius_mean`, `texture_mean`, `perimeter_mean`, `concave.points_mean`); AIC = **172.35**, McFadden R² ≈ 0.784.
 - **Ridge (λ.min y λ.1se)**: conserva las 10 variables y reproduce el modelo completo (AIC = **168.13**, McFadden R² ≈ 0.806); aporta estabilidad pero no reduce dimensionalidad.
